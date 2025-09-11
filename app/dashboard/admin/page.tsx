@@ -124,13 +124,13 @@ export default async function AdminDashboard() {
                   className="flex items-center justify-between p-3 bg-muted/50 rounded-lg border border-border/50"
                 >
                   <div className="flex items-center space-x-3">
-                    <Badge variant="outline" className="border-secondary text-secondary">
+                    <Badge variant="outline" className="border-secondary text-secondary-foreground">
                       Group {group.group_number}
                     </Badge>
                     <span className="text-sm text-muted-foreground">{group.club_count} clubs</span>
                   </div>
                   <div className="text-right">
-                    <div className="font-semibold text-secondary">
+                    <div className="font-semibold text-secondary-foreground">
                       {group.actual_total}/{group.estimated_total}
                     </div>
                     <div className="text-xs text-muted-foreground">
@@ -153,7 +153,7 @@ export default async function AdminDashboard() {
           <CardContent>
             <div className="space-y-6">
               <div>
-                <h4 className="font-medium text-secondary mb-3">Top College-Based Clubs</h4>
+                <h4 className="font-medium text-secondary-foreground mb-3">Top College-Based Clubs</h4>
                 <div className="space-y-2">
                   {topCollegeClubs?.slice(0, 3).map((club, index) => (
                     <div
@@ -181,7 +181,7 @@ export default async function AdminDashboard() {
               </div>
 
               <div>
-                <h4 className="font-medium text-secondary mb-3">Top Community-Based Clubs</h4>
+                <h4 className="font-medium text-secondary-foreground mb-3">Top Community-Based Clubs</h4>
                 <div className="space-y-2">
                   {topCommunityClubs?.slice(0, 3).map((club, index) => (
                     <div
@@ -224,7 +224,7 @@ export default async function AdminDashboard() {
               return (
                 <div key={group.group_number} className="space-y-2">
                   <div className="flex justify-between items-center">
-                    <span className="text-sm font-medium text-secondary">Group {group.group_number}</span>
+                    <span className="text-sm font-medium text-secondary-foreground">Group {group.group_number}</span>
                     <span className="text-sm text-muted-foreground">
                       {group.actual_total}/{group.estimated_total} ({percentage}%)
                     </span>
