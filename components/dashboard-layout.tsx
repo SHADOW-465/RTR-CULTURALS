@@ -32,24 +32,33 @@ export function DashboardLayout({ children, title, userRole }: DashboardLayoutPr
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div
+      className="min-h-screen bg-background text-foreground"
+      style={{ backgroundColor: "#0a0a0a", color: "#f8c646" }}
+    >
       {/* Header */}
-      <header className="bg-white shadow-sm border-b">
+      <header className="josh-gradient border-b border-border shadow-lg">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center space-x-4">
               <div className="flex items-center space-x-2">
-                <BarChart3 className="w-8 h-8 text-blue-600" />
-                <h1 className="text-xl font-bold text-gray-900">RID 3233 Culturals JOSH</h1>
+                <BarChart3 className="w-8 h-8 text-primary golden-glow" />
+                <h1 className="text-xl font-bold golden-glow">JOSH District Culturals 2025</h1>
               </div>
               {userRole && (
-                <span className="px-3 py-1 text-xs font-medium bg-blue-100 text-blue-800 rounded-full capitalize">
-                  {userRole.replace(/(\d+)/, " $1")}
+                <span className="px-3 py-1 text-xs font-medium bg-primary/20 text-primary-foreground rounded-full capitalize border border-primary/30">
+                  {userRole.replace(/(\\d+)/, " $1")}
                 </span>
               )}
             </div>
             <div className="flex items-center space-x-4">
-              <Button variant="ghost" size="sm" onClick={handleLogout} disabled={isLoggingOut}>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={handleLogout}
+                disabled={isLoggingOut}
+                className="text-foreground hover:bg-primary/20 hover:text-primary-foreground border border-primary/30"
+              >
                 <LogOut className="w-4 h-4 mr-2" />
                 {isLoggingOut ? "Signing out..." : "Sign Out"}
               </Button>
@@ -61,7 +70,7 @@ export function DashboardLayout({ children, title, userRole }: DashboardLayoutPr
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="mb-8">
-          <h2 className="text-3xl font-bold text-gray-900">{title}</h2>
+          <h2 className="text-3xl font-bold golden-glow">{title}</h2>
         </div>
         {children}
       </main>
