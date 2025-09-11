@@ -275,7 +275,7 @@ export default async function AdminDashboard() {
                   <div>
                     <p className="font-semibold">{club.name}</p>
                     <p className="text-sm text-muted-foreground">
-                      Group {club.group_number} | Target: {club.actual_count}/{club.estimated_count}
+                      Group {club.group_number} | Progress: {club.actual_count}/{club.estimated_count}
                     </p>
                   </div>
                   <EditClubDialog club={club} />
@@ -299,7 +299,7 @@ export default async function AdminDashboard() {
                   <div>
                     <p className="font-semibold">{club.name}</p>
                     <p className="text-sm text-muted-foreground">
-                      Group {club.group_number} | Target: {club.actual_count}/{club.estimated_count}
+                      Group {club.group_number} | Progress: {club.actual_count}/{club.estimated_count}
                     </p>
                   </div>
                   <EditClubDialog club={club} />

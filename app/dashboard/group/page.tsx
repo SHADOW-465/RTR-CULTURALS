@@ -100,41 +100,86 @@ export default async function GroupDashboard() {
               <p className="text-sm">Click "Add Club" to get started.</p>
             </div>
           ) : (
-            <div className="space-y-4">
-              {clubs.map((club) => (
-                <div
-                  key={club.id}
-                  className="flex items-center justify-between p-4 bg-muted/50 rounded-lg border border-border/50"
-                >
-                  <div className="flex-1">
-                    <div className="flex items-center space-x-3 mb-2">
-                      <h3 className="font-medium text-foreground">{club.name}</h3>
-                      <Badge
-                        variant={club.type === "college" ? "default" : "secondary"}
-                        className={
-                          club.type === "college"
-                            ? "bg-primary text-primary-foreground"
-                            : "bg-secondary text-secondary-foreground"
-                        }
-                      >
-                        {club.type === "college" ? "College" : "Community"}
-                      </Badge>
+            <div className="space-y-6">
+              {/* College Clubs List */}
+              <div>
+                <h3 className="text-lg font-medium text-foreground mb-4 flex items-center">
+                  <Building className="w-5 h-5 mr-2" />
+                  College Clubs ({collegeClubs.length})
+                </h3>
+                <div className="space-y-4">
+                  {collegeClubs.map((club) => (
+                    <div
+                      key={club.id}
+                      className="flex items-center justify-between p-4 bg-muted/50 rounded-lg border border-border/50"
+                    >
+                      <div className="flex-1">
+                        <div className="flex items-center space-x-3 mb-2">
+                          <h3 className="font-medium text-foreground">{club.name}</h3>
+                          <Badge variant="default" className="bg-primary text-primary-foreground">
+                            College
+                          </Badge>
+                        </div>
+                        <div className="flex items-center space-x-6 text-sm text-muted-foreground">
+                          <span className="font-medium text-secondary">
+                            Target: {club.actual_count}/{club.estimated_count}
+                          </span>
+                          <span>
+                            Progress:{" "}
+                            {club.estimated_count > 0
+                              ? Math.round((club.actual_count / club.estimated_count) * 100)
+                              : 0}
+                            %
+                          </span>
+                        </div>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <EditClubDialog club={club} />
+                      </div>
                     </div>
-                    <div className="flex items-center space-x-6 text-sm text-muted-foreground">
-                      <span className="font-medium text-secondary">
-                        Target: {club.actual_count}/{club.estimated_count}
-                      </span>
-                      <span>
-                        Progress:{" "}
-                        {club.estimated_count > 0 ? Math.round((club.actual_count / club.estimated_count) * 100) : 0}%
-                      </span>
-                    </div>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <EditClubDialog club={club} />
-                  </div>
+                  ))}
                 </div>
-              ))}
+              </div>
+
+              {/* Community Clubs List */}
+              <div>
+                <h3 className="text-lg font-medium text-foreground mb-4 flex items-center">
+                  <Home className="w-5 h-5 mr-2" />
+                  Community Clubs ({communityClubs.length})
+                </h3>
+                <div className="space-y-4">
+                  {communityClubs.map((club) => (
+                    <div
+                      key={club.id}
+                      className="flex items-center justify-between p-4 bg-muted/50 rounded-lg border border-border/50"
+                    >
+                      <div className="flex-1">
+                        <div className="flex items-center space-x-3 mb-2">
+                          <h3 className="font-medium text-foreground">{club.name}</h3>
+                          <Badge variant="secondary" className="bg-secondary text-secondary-foreground">
+                            Community
+                          </Badge>
+                        </div>
+                        <div className="flex items-center space-x-6 text-sm text-muted-foreground">
+                          <span className="font-medium text-secondary">
+                            Target: {club.actual_count}/{club.estimated_count}
+                          </span>
+                          <span>
+                            Progress:{" "}
+                            {club.estimated_count > 0
+                              ? Math.round((club.actual_count / club.estimated_count) * 100)
+                              : 0}
+                            %
+                          </span>
+                        </div>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <EditClubDialog club={club} />
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
             </div>
           )}
         </CardContent>
