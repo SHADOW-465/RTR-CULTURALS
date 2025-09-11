@@ -50,7 +50,7 @@ export default async function GroupDashboard() {
   return (
     <DashboardLayout title={`${user.group_name} Dashboard`} userRole={user.role}>
       <div className="mb-8">
-        <h1 className="text-2xl font-bold golden-glow mb-2">{user.group_name}</h1>
+        <h1 className="text-2xl font-bold text-secondary soft-glow mb-2">{user.group_name}</h1>
         <p className="text-muted-foreground">JOSH District Culturals 2025</p>
       </div>
 
@@ -61,28 +61,19 @@ export default async function GroupDashboard() {
           value={`${totalActual}/${totalEstimated}`}
           subtitle={`${totalEstimated > 0 ? Math.round((totalActual / totalEstimated) * 100) : 0}% completed`}
           icon={Target}
-          className="bg-gradient-to-br from-card to-primary/10 border-primary/20"
         />
-        <StatsCard
-          title="Total Clubs"
-          value={clubs?.length || 0}
-          subtitle="Registered clubs"
-          icon={Users}
-          className="bg-gradient-to-br from-card to-secondary/10 border-secondary/20"
-        />
+        <StatsCard title="Total Clubs" value={clubs?.length || 0} subtitle="Registered clubs" icon={Users} />
         <StatsCard
           title="College Clubs"
           value={collegeClubs.length}
           subtitle="Educational institutions"
           icon={Building}
-          className="bg-gradient-to-br from-card to-accent/10 border-accent/20"
         />
         <StatsCard
           title="Community Clubs"
           value={communityClubs.length}
           subtitle="Community based"
           icon={Home}
-          className="bg-gradient-to-br from-card to-chart-1/10 border-chart-1/20"
         />
       </div>
 
@@ -92,11 +83,11 @@ export default async function GroupDashboard() {
       </div>
 
       {/* Clubs List */}
-      <Card className="bg-gradient-to-br from-card to-primary/5 border-primary/20">
+      <Card>
         <CardHeader>
-          <CardTitle className="flex items-center justify-between golden-glow">
+          <CardTitle className="flex items-center justify-between text-secondary">
             <span>Club Registrations</span>
-            <Badge variant="outline" className="border-secondary text-secondary">
+            <Badge variant="outline" className="border-secondary text-muted-foreground">
               {clubs?.length || 0} clubs
             </Badge>
           </CardTitle>
@@ -131,7 +122,7 @@ export default async function GroupDashboard() {
                     </div>
                     <div className="flex items-center space-x-6 text-sm text-muted-foreground">
                       <span className="font-medium text-secondary">
-                        Target: {club.estimated_count}/{club.actual_count}
+                        Target: {club.actual_count}/{club.estimated_count}
                       </span>
                       <span>
                         Progress:{" "}
@@ -153,20 +144,20 @@ export default async function GroupDashboard() {
       {clubs && clubs.length > 0 && (
         <Card className="mt-6">
           <CardHeader>
-            <CardTitle>Registration Progress</CardTitle>
+            <CardTitle className="text-secondary">Registration Progress</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
               <div className="flex justify-between items-center">
                 <span className="text-sm font-medium">Overall Progress</span>
-                <span className="text-sm text-gray-500">
+                <span className="text-sm text-muted-foreground">
                   {totalActual} / {totalEstimated} (
                   {totalEstimated > 0 ? Math.round((totalActual / totalEstimated) * 100) : 0}%)
                 </span>
               </div>
-              <div className="w-full bg-gray-200 rounded-full h-3">
+              <div className="w-full bg-muted rounded-full h-3">
                 <div
-                  className="bg-blue-600 h-3 rounded-full transition-all duration-300"
+                  className="bg-gradient-to-r from-primary to-secondary h-3 rounded-full transition-all duration-300"
                   style={{
                     width: `${totalEstimated > 0 ? Math.min((totalActual / totalEstimated) * 100, 100) : 0}%`,
                   }}
