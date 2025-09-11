@@ -71,47 +71,38 @@ export default async function AdminDashboard() {
   return (
     <DashboardLayout title="Admin Dashboard" userRole="admin">
       <div className="mb-8">
-        <h1 className="text-3xl font-bold golden-glow mb-2">JOSH District Culturals 2025</h1>
+        <h1 className="text-3xl font-bold text-secondary mb-2">JOSH District Culturals 2025</h1>
         <p className="text-muted-foreground">Registration Portal Dashboard</p>
       </div>
 
       {/* District Overview */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-        <StatsCard
-          title="Total Clubs"
-          value="3233"
-          subtitle="Across district"
-          icon={Users}
-          className="bg-gradient-to-br from-card to-primary/10 border-primary/20"
-        />
+        <StatsCard title="Total Clubs" value="3233" subtitle="Across district" icon={Users} />
         <StatsCard
           title="Completion Rate"
           value={`${completionRate}%`}
           subtitle={`${districtActual}/${districtEstimated} registered`}
           icon={Target}
-          className="bg-gradient-to-br from-card to-secondary/10 border-secondary/20"
         />
         <StatsCard
           title="Days Remaining"
           value={daysLeft > 0 ? daysLeft : 0}
           subtitle="To complete target"
           icon={Clock}
-          className="bg-gradient-to-br from-card to-accent/10 border-accent/20"
         />
         <StatsCard
           title="Registration Progress"
           value={`${districtActual}`}
           subtitle="Total registrations"
           icon={Calendar}
-          className="bg-gradient-to-br from-card to-chart-1/10 border-chart-1/20"
         />
       </div>
 
       {/* Group Performance */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-        <Card className="bg-gradient-to-br from-card to-primary/5 border-primary/20">
+        <Card>
           <CardHeader>
-            <CardTitle className="flex items-center space-x-2 golden-glow">
+            <CardTitle className="flex items-center space-x-2 text-secondary">
               <Users className="w-5 h-5" />
               <span>Group Performance</span>
             </CardTitle>
@@ -143,9 +134,9 @@ export default async function AdminDashboard() {
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-card to-secondary/5 border-secondary/20">
+        <Card>
           <CardHeader>
-            <CardTitle className="flex items-center space-x-2 golden-glow">
+            <CardTitle className="flex items-center space-x-2 text-secondary">
               <Trophy className="w-5 h-5" />
               <span>Top Performers</span>
             </CardTitle>
@@ -213,9 +204,9 @@ export default async function AdminDashboard() {
       </div>
 
       {/* Progress Visualization */}
-      <Card className="bg-gradient-to-br from-card to-chart-1/5 border-chart-1/20">
+      <Card>
         <CardHeader>
-          <CardTitle className="golden-glow">Registration Progress by Group</CardTitle>
+          <CardTitle className="text-secondary">Registration Progress by Group</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="space-y-4">

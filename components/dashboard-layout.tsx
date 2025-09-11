@@ -32,18 +32,15 @@ export function DashboardLayout({ children, title, userRole }: DashboardLayoutPr
   }
 
   return (
-    <div
-      className="min-h-screen bg-background text-foreground"
-      style={{ backgroundColor: "#0a0a0a", color: "#f8c646" }}
-    >
+    <div className="min-h-screen bg-background text-foreground">
       {/* Header */}
-      <header className="josh-gradient border-b border-border shadow-lg">
+      <header className="border-b border-border">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center space-x-4">
               <div className="flex items-center space-x-2">
-                <BarChart3 className="w-8 h-8 text-primary golden-glow" />
-                <h1 className="text-xl font-bold golden-glow">JOSH District Culturals 2025</h1>
+                <BarChart3 className="w-8 h-8 text-secondary" />
+                <h1 className="text-xl font-bold text-secondary">JOSH District Culturals 2025</h1>
               </div>
               {userRole && (
                 <span className="px-3 py-1 text-xs font-medium bg-primary/20 text-primary-foreground rounded-full capitalize border border-primary/30">
@@ -52,13 +49,7 @@ export function DashboardLayout({ children, title, userRole }: DashboardLayoutPr
               )}
             </div>
             <div className="flex items-center space-x-4">
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={handleLogout}
-                disabled={isLoggingOut}
-                className="text-foreground hover:bg-primary/20 hover:text-primary-foreground border border-primary/30"
-              >
+              <Button variant="ghost" size="sm" onClick={handleLogout} disabled={isLoggingOut}>
                 <LogOut className="w-4 h-4 mr-2" />
                 {isLoggingOut ? "Signing out..." : "Sign Out"}
               </Button>
@@ -68,9 +59,9 @@ export function DashboardLayout({ children, title, userRole }: DashboardLayoutPr
       </header>
 
       {/* Main Content */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="mb-8">
-          <h2 className="text-3xl font-bold golden-glow">{title}</h2>
+          <h2 className="text-3xl font-bold text-secondary">{title}</h2>
         </div>
         {children}
       </main>
