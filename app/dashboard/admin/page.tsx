@@ -71,30 +71,39 @@ export default async function AdminDashboard() {
   return (
     <DashboardLayout title="Admin Dashboard" userRole="admin">
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-secondary mb-2">JOSH District Culturals 2025</h1>
+        <h1 className="text-3xl font-bold text-secondary soft-glow mb-2">JOSH District Culturals 2025</h1>
         <p className="text-muted-foreground">Registration Portal Dashboard</p>
       </div>
 
       {/* District Overview */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-        <StatsCard title="Total Clubs" value="3233" subtitle="Across district" icon={Users} />
+        <StatsCard
+          title="Total Clubs"
+          value="3233"
+          subtitle="Across district"
+          icon={Users}
+          className="border-secondary"
+        />
         <StatsCard
           title="Completion Rate"
           value={`${completionRate}%`}
           subtitle={`${districtActual}/${districtEstimated} registered`}
           icon={Target}
+          className="border-secondary"
         />
         <StatsCard
           title="Days Remaining"
           value={daysLeft > 0 ? daysLeft : 0}
           subtitle="To complete target"
           icon={Clock}
+          className="border-secondary"
         />
         <StatsCard
           title="Registration Progress"
           value={`${districtActual}`}
           subtitle="Total registrations"
           icon={Calendar}
+          className="border-secondary"
         />
       </div>
 
