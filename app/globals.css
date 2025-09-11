@@ -99,3 +99,9 @@
 .soft-glow {
   text-shadow: 0 0 8px rgba(248, 198, 70, 0.4);
 }
+
+@keyframes border-beam {
+  100% {
+    offset-distance: 100%;
+  }
+}
