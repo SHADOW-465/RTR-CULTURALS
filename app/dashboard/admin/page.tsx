@@ -11,16 +11,9 @@ import { EditClubDialog } from "@/components/edit-club-dialog"
 
 interface GroupStats {
   group_number: number
-  estimated_total: number
-  actual_total: number
+  target_total: number
+  achieved_total: number
   club_count: number
-}
-
-interface TopClub {
-  name: string
-  type: string
-  actual_count: number
-  group_number: number
 }
 
 export default async function AdminDashboard() {
@@ -32,53 +25,71 @@ export default async function AdminDashboard() {
 
   const supabase = await createServerClient()
 
-  // Get group statistics
-  const { data: groupStats } = await supabase.from("clubs").select("group_number, estimated_count, actual_count")
+  const { data: allClubsData, error } = await supabase
+    .from("clubs")
+    .select(
+      `
+      id,
+      name,
+      type,
+      group_number,
+      club_registrations (
+        target_registrations,
+        achieved_registrations
+      )
+    `
+    )
+    .order("name", { ascending: true })
+
+  if (error) {
+    console.error("Error fetching clubs data:", error)
+    // Handle the error appropriately
+    return <div>Error loading data.</div>
+  }
+
+  const allClubs = allClubsData.map((club) => ({
+    ...club,
+    target_registrations: club.club_registrations[0]?.target_registrations || 0,
+    achieved_registrations: club.club_registrations[0]?.achieved_registrations || 0,
+  }))
 
   // Calculate group totals
   const groupTotals: GroupStats[] = []
   for (let i = 1; i <= 5; i++) {
-    const groupClubs = groupStats?.filter((club) => club.group_number === i) || []
+    const groupClubs = allClubs.filter((club) => club.group_number === i)
     groupTotals.push({
       group_number: i,
-      estimated_total: groupClubs.reduce((sum, club) => sum + (club.estimated_count || 0), 0),
-      actual_total: groupClubs.reduce((sum, club) => sum + (club.actual_count || 0), 0),
+      target_total: groupClubs.reduce((sum, club) => sum + club.target_registrations, 0),
+      achieved_total: groupClubs.reduce((sum, club) => sum + club.achieved_registrations, 0),
       club_count: groupClubs.length,
     })
   }
 
   // Calculate district totals
-  const districtEstimated = 3500
-  const districtActual = groupTotals.reduce((sum, group) => sum + group.actual_total, 0)
+  const districtTarget = 3500
+  const districtAchieved = groupTotals.reduce((sum, group) => sum + group.achieved_total, 0)
+  const totalClubs = allClubs.length
 
-  const { count: totalClubs } = await supabase.from("clubs").select("id", { count: "exact", head: true })
-
-  const completionRate = districtEstimated > 0 ? Math.round((districtActual / districtEstimated) * 100) : 0
+  const completionRate = districtTarget > 0 ? Math.round((districtAchieved / districtTarget) * 100) : 0
   const endDate = new Date("2025-12-31") // Assuming end date
   const today = new Date()
   const daysLeft = Math.ceil((endDate.getTime() - today.getTime()) / (1000 * 60 * 60 * 24))
 
-  const { data: topCollegeClubs } = await supabase
-    .from("clubs")
-    .select("name, actual_count, group_number")
-    .eq("type", "college")
-    .order("actual_count", { ascending: false })
-    .limit(3)
+  const topCollegeClubs = allClubs
+    .filter((club) => club.type === "college")
+    .sort((a, b) => b.achieved_registrations - a.achieved_registrations)
+    .slice(0, 3)
 
-  const { data: topCommunityClubs } = await supabase
-    .from("clubs")
-    .select("name, actual_count, group_number")
-    .eq("type", "community")
-    .order("actual_count", { ascending: false })
-    .limit(3)
+  const topCommunityClubs = allClubs
+    .filter((club) => club.type === "community")
+    .sort((a, b) => b.achieved_registrations - a.achieved_registrations)
+    .slice(0, 3)
 
-  const { data: allClubs } = await supabase.from("clubs").select("*").order("name", { ascending: true })
-
-  const collegeClubsList = allClubs?.filter((club) => club.type === "college") || []
-  const communityClubsList = allClubs?.filter((club) => club.type === "community") || []
+  const collegeClubsList = allClubs.filter((club) => club.type === "college")
+  const communityClubsList = allClubs.filter((club) => club.type === "community")
 
   return (
-    <DashboardLayout title="Admin Dashboard" userRole="admin">
+    <DashboardLayout title="Admin Dashboard" userRole={user.role}>
       <div className="mb-8">
         <h1 className="text-3xl font-bold text-secondary soft-glow mb-2">JOSH District Culturals 2025</h1>
         <p className="text-muted-foreground">Registration Portal Dashboard</p>
@@ -86,17 +97,11 @@ export default async function AdminDashboard() {
 
       {/* District Overview */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-        <StatsCard
-          title="Total Clubs"
-          value={totalClubs ?? 0}
-          subtitle="Across district"
-          icon={Users}
-          className="border-secondary"
-        />
+        <StatsCard title="Total Clubs" value={totalClubs} subtitle="Across district" icon={Users} className="border-secondary" />
         <StatsCard
           title="Completion Rate"
           value={`${completionRate}%`}
-          subtitle={`${districtActual}/${districtEstimated} registered`}
+          subtitle={`${districtAchieved}/${districtTarget} registered`}
           icon={Target}
           className="border-secondary"
         />
@@ -109,7 +114,7 @@ export default async function AdminDashboard() {
         />
         <StatsCard
           title="Registration Progress"
-          value={`${districtActual}`}
+          value={`${districtAchieved}`}
           subtitle="Total registrations"
           icon={Calendar}
           className="border-secondary"
@@ -129,7 +134,9 @@ export default async function AdminDashboard() {
             <div className="space-y-4">
               {groupTotals.map((group) => {
                 const percentage =
-                  group.estimated_total > 0 ? Math.round((group.actual_total / group.estimated_total) * 100) : 0
+                  group.target_total > 0
+                    ? Math.round((group.achieved_total / group.target_total) * 100)
+                    : 0
                 return (
                   <div
                     key={group.group_number}
@@ -144,7 +151,7 @@ export default async function AdminDashboard() {
                       </div>
                       <div className="text-right">
                         <div className="font-semibold text-foreground">
-                          {group.actual_total}/{group.estimated_total}
+                          {group.achieved_total}/{group.target_total}
                         </div>
                         <div className="text-xs text-muted-foreground">{percentage}% complete</div>
                       </div>
@@ -174,9 +181,9 @@ export default async function AdminDashboard() {
               <div>
                 <h4 className="font-medium text-foreground mb-3">Top College-Based Clubs</h4>
                 <div className="space-y-2">
-                  {topCollegeClubs?.slice(0, 3).map((club, index) => (
+                  {topCollegeClubs.map((club, index) => (
                     <div
-                      key={club.name}
+                      key={club.id}
                       className="flex items-center justify-between p-2 bg-primary/10 rounded border border-primary/20"
                     >
                       <div className="flex items-center space-x-2">
@@ -193,7 +200,7 @@ export default async function AdminDashboard() {
                           </Badge>
                         </div>
                       </div>
-                      <div className="font-bold text-foreground">{club.actual_count}</div>
+                      <div className="font-bold text-foreground">{club.achieved_registrations}</div>
                     </div>
                   ))}
                 </div>
@@ -202,9 +209,9 @@ export default async function AdminDashboard() {
               <div>
                 <h4 className="font-medium text-foreground mb-3">Top Community-Based Clubs</h4>
                 <div className="space-y-2">
-                  {topCommunityClubs?.slice(0, 3).map((club, index) => (
+                  {topCommunityClubs.map((club, index) => (
                     <div
-                      key={club.name}
+                      key={club.id}
                       className="flex items-center justify-between p-2 bg-accent/10 rounded border border-accent/20"
                     >
                       <div className="flex items-center space-x-2">
@@ -221,7 +228,7 @@ export default async function AdminDashboard() {
                           </Badge>
                         </div>
                       </div>
-                      <div className="font-bold text-foreground">{club.actual_count}</div>
+                      <div className="font-bold text-foreground">{club.achieved_registrations}</div>
                     </div>
                   ))}
                 </div>
@@ -245,50 +252,52 @@ export default async function AdminDashboard() {
             <div>
               <h3 className="text-lg font-medium text-foreground mb-4 flex items-center">
                 <Building className="w-5 h-5 mr-2" />
-              College Clubs ({collegeClubsList.length})
-            </h3>
-            <div className="space-y-4">
-              {collegeClubsList.map((club) => (
-                <div
-                  key={club.id}
-                  className="flex items-center justify-between p-4 bg-muted/50 rounded-lg border border-border/50"
-                >
-                  <div>
-                    <p className="font-semibold">{club.name}</p>
-                    <p className="text-sm text-muted-foreground">
-                      Group {club.group_number} | Progress: {club.actual_count}/{club.estimated_count}
-                    </p>
+                College Clubs ({collegeClubsList.length})
+              </h3>
+              <div className="space-y-4">
+                {collegeClubsList.map((club) => (
+                  <div
+                    key={club.id}
+                    className="flex items-center justify-between p-4 bg-muted/50 rounded-lg border border-border/50"
+                  >
+                    <div>
+                      <p className="font-semibold">{club.name}</p>
+                      <p className="text-sm text-muted-foreground">
+                        Group {club.group_number} | Progress: {club.achieved_registrations}/
+                        {club.target_registrations}
+                      </p>
+                    </div>
+                    <EditClubDialog club={club} />
                   </div>
-                  <EditClubDialog club={club} />
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
-          </div>
 
-          {/* Community Clubs List */}
-          <div>
-            <h3 className="text-lg font-medium text-foreground mb-4 flex items-center">
-              <Home className="w-5 h-5 mr-2" />
-              Community Clubs ({communityClubsList.length})
-            </h3>
-            <div className="space-y-4">
-              {communityClubsList.map((club) => (
-                <div
-                  key={club.id}
-                  className="flex items-center justify-between p-4 bg-muted/50 rounded-lg border border-border/50"
-                >
-                  <div>
-                    <p className="font-semibold">{club.name}</p>
-                    <p className="text-sm text-muted-foreground">
-                      Group {club.group_number} | Progress: {club.actual_count}/{club.estimated_count}
-                    </p>
+            {/* Community Clubs List */}
+            <div>
+              <h3 className="text-lg font-medium text-foreground mb-4 flex items-center">
+                <Home className="w-5 h-5 mr-2" />
+                Community Clubs ({communityClubsList.length})
+              </h3>
+              <div className="space-y-4">
+                {communityClubsList.map((club) => (
+                  <div
+                    key={club.id}
+                    className="flex items-center justify-between p-4 bg-muted/50 rounded-lg border border-border/50"
+                  >
+                    <div>
+                      <p className="font-semibold">{club.name}</p>
+                      <p className="text-sm text-muted-foreground">
+                        Group {club.group_number} | Progress: {club.achieved_registrations}/
+                        {club.target_registrations}
+                      </p>
+                    </div>
+                    <EditClubDialog club={club} />
                   </div>
-                  <EditClubDialog club={club} />
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
           </div>
-        </div>
         </CardContent>
       </Card>
     </DashboardLayout>

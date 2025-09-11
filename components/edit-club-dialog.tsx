@@ -23,29 +23,29 @@ interface Club {
   id: string
   name: string
   type: string
-  estimated_count: number
-  actual_count: number
+  group_number: number
+  target_registrations: number
+  achieved_registrations: number
 }
 
 interface EditClubDialogProps {
   club: Club
-  onClubUpdated: () => void
 }
 
-export function EditClubDialog({ club, onClubUpdated }: EditClubDialogProps) {
+export function EditClubDialog({ club }: EditClubDialogProps) {
   const [open, setOpen] = useState(false)
   const [clubName, setClubName] = useState(club.name)
   const [clubType, setClubType] = useState(club.type)
-  const [estimatedCount, setEstimatedCount] = useState(club.estimated_count.toString())
-  const [actualCount, setActualCount] = useState(club.actual_count.toString())
+  const [targetRegistrations, setTargetRegistrations] = useState(club.target_registrations.toString())
+  const [achievedRegistrations, setAchievedRegistrations] = useState(club.achieved_registrations.toString())
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
     setClubName(club.name)
     setClubType(club.type)
-    setEstimatedCount(club.estimated_count.toString())
-    setActualCount(club.actual_count.toString())
+    setTargetRegistrations(club.target_registrations.toString())
+    setAchievedRegistrations(club.achieved_registrations.toString())
   }, [club])
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -53,24 +53,28 @@ export function EditClubDialog({ club, onClubUpdated }: EditClubDialogProps) {
     setIsLoading(true)
     setError(null)
 
-    const supabase = createClient()
-
     try {
-      const { error } = await supabase
-        .from("clubs")
-        .update({
+      const response = await fetch("/api/clubs", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          id: club.id,
           name: clubName,
           type: clubType,
-          estimated_count: Number.parseInt(estimatedCount) || 0,
-          actual_count: Number.parseInt(actualCount) || 0,
-          updated_at: new Date().toISOString(),
-        })
-        .eq("id", club.id)
+          group_number: club.group_number,
+          target_registrations: Number.parseInt(targetRegistrations) || 0,
+          achieved_registrations: Number.parseInt(achievedRegistrations) || 0,
+        }),
+      })
 
-      if (error) throw error
+      if (!response.ok) {
+        const errorData = await response.json()
+        throw new Error(errorData.error || "Failed to update club")
+      }
 
       setOpen(false)
-      onClubUpdated()
+      // Refresh data on the page
+      window.location.reload()
     } catch (error: unknown) {
       setError(error instanceof Error ? error.message : "An error occurred")
     } finally {
@@ -111,22 +115,22 @@ export function EditClubDialog({ club, onClubUpdated }: EditClubDialogProps) {
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="estimatedCount">Estimated Count</Label>
+                <Label htmlFor="targetRegistrations">Target Registrations</Label>
                 <Input
-                  id="estimatedCount"
+                  id="targetRegistrations"
                   type="number"
-                  value={estimatedCount}
-                  onChange={(e) => setEstimatedCount(e.target.value)}
+                  value={targetRegistrations}
+                  onChange={(e) => setTargetRegistrations(e.target.value)}
                   min="0"
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="actualCount">Actual Count</Label>
+                <Label htmlFor="achievedRegistrations">Achieved Registrations</Label>
                 <Input
-                  id="actualCount"
+                  id="achievedRegistrations"
                   type="number"
-                  value={actualCount}
-                  onChange={(e) => setActualCount(e.target.value)}
+                  value={achievedRegistrations}
+                  onChange={(e) => setAchievedRegistrations(e.target.value)}
                   min="0"
                 />
               </div>

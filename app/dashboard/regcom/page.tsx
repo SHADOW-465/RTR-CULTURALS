@@ -11,21 +11,10 @@ import { Users, Target, Trophy, ExternalLink } from "lucide-react"
 
 interface GroupStats {
   group_number: number
-  estimated_total: number
-  actual_total: number
+  target_total: number
+  achieved_total: number
   club_count: number
   external_count: number
-}
-
-interface Club {
-  id: string
-  name: string
-  type: string
-  group_number: number
-  estimated_count: number
-  actual_count: number
-  is_external: boolean
-  created_at: string
 }
 
 export default async function RegcomDashboard() {
@@ -37,51 +26,65 @@ export default async function RegcomDashboard() {
 
   const supabase = await createServerClient()
 
-  // Get all clubs data
-  const { data: allClubs } = await supabase
+  const { data: allClubsData, error } = await supabase
     .from("clubs")
-    .select("*")
+    .select(
+      `
+      id,
+      name,
+      type,
+      group_number,
+      is_external,
+      created_at,
+      club_registrations (
+        target_registrations,
+        achieved_registrations
+      )
+    `
+    )
     .order("group_number", { ascending: true })
     .order("created_at", { ascending: false })
+
+  if (error) {
+    console.error("Error fetching clubs data for regcom:", error)
+    return <div>Error loading data.</div>
+  }
+
+  const allClubs = allClubsData.map((club) => ({
+    ...club,
+    target_registrations: club.club_registrations[0]?.target_registrations || 0,
+    achieved_registrations: club.club_registrations[0]?.achieved_registrations || 0,
+  }))
 
   // Calculate group statistics
   const groupTotals: GroupStats[] = []
   for (let i = 1; i <= 5; i++) {
-    const groupClubs = allClubs?.filter((club) => club.group_number === i) || []
+    const groupClubs = allClubs.filter((club) => club.group_number === i)
     const externalClubs = groupClubs.filter((club) => club.is_external)
     groupTotals.push({
       group_number: i,
-      estimated_total: groupClubs.reduce((sum, club) => sum + (club.estimated_count || 0), 0),
-      actual_total: groupClubs.reduce((sum, club) => sum + (club.actual_count || 0), 0),
+      target_total: groupClubs.reduce((sum, club) => sum + club.target_registrations, 0),
+      achieved_total: groupClubs.reduce((sum, club) => sum + club.achieved_registrations, 0),
       club_count: groupClubs.length,
       external_count: externalClubs.length,
     })
   }
 
   // Calculate district totals
-  const districtEstimated = groupTotals.reduce((sum, group) => sum + group.estimated_total, 0)
-  const districtActual = groupTotals.reduce((sum, group) => sum + group.actual_total, 0)
+  const districtTarget = groupTotals.reduce((sum, group) => sum + group.target_total, 0)
+  const districtAchieved = groupTotals.reduce((sum, group) => sum + group.achieved_total, 0)
   const totalExternalClubs = groupTotals.reduce((sum, group) => sum + group.external_count, 0)
 
   // Get top clubs
-  const { data: topCollegeClub } = await supabase
-    .from("clubs")
-    .select("name, actual_count, group_number")
-    .eq("type", "college")
-    .order("actual_count", { ascending: false })
-    .limit(1)
-    .single()
-
-  const { data: topCommunityClub } = await supabase
-    .from("clubs")
-    .select("name, actual_count, group_number")
-    .eq("type", "community")
-    .order("actual_count", { ascending: false })
-    .limit(1)
-    .single()
+  const topCollegeClub = [...allClubs]
+    .filter((c) => c.type === "college")
+    .sort((a, b) => b.achieved_registrations - a.achieved_registrations)[0]
+  const topCommunityClub = [...allClubs]
+    .filter((c) => c.type === "community")
+    .sort((a, b) => b.achieved_registrations - a.achieved_registrations)[0]
 
   // Get external clubs
-  const externalClubs = allClubs?.filter((club) => club.is_external) || []
+  const externalClubs = allClubs.filter((club) => club.is_external)
 
   return (
     <DashboardLayout title="Registration Committee Dashboard" userRole="regcom">
@@ -89,11 +92,11 @@ export default async function RegcomDashboard() {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
         <StatsCard
           title="District Target"
-          value={`${districtActual} / ${districtEstimated}`}
-          subtitle={`${Math.round((districtActual / districtEstimated) * 100)}% completed`}
+          value={`${districtAchieved} / ${districtTarget}`}
+          subtitle={`${districtTarget > 0 ? Math.round((districtAchieved / districtTarget) * 100) : 0}% completed`}
           icon={Target}
         />
-        <StatsCard title="Total Clubs" value={allClubs?.length || 0} subtitle="Across all groups" icon={Users} />
+        <StatsCard title="Total Clubs" value={allClubs.length} subtitle="Across all groups" icon={Users} />
         <StatsCard
           title="External Clubs"
           value={totalExternalClubs}
@@ -102,7 +105,7 @@ export default async function RegcomDashboard() {
         />
         <StatsCard
           title="Top Performance"
-          value={topCollegeClub?.actual_count || 0}
+          value={topCollegeClub?.achieved_registrations || 0}
           subtitle="Highest registrations"
           icon={Trophy}
         />
@@ -140,10 +143,12 @@ export default async function RegcomDashboard() {
                       </div>
                       <div className="text-right">
                         <div className="font-semibold">
-                          {group.actual_total} / {group.estimated_total}
+                          {group.achieved_total} / {group.target_total}
                         </div>
                         <div className="text-xs text-gray-500">
-                          {Math.round((group.actual_total / group.estimated_total) * 100)}% complete
+                          {group.target_total > 0
+                            ? `${Math.round((group.achieved_total / group.target_total) * 100)}% complete`
+                            : "N/A"}
                         </div>
                       </div>
                     </div>
@@ -171,7 +176,7 @@ export default async function RegcomDashboard() {
                             Group {topCollegeClub.group_number}
                           </Badge>
                         </div>
-                        <div className="text-2xl font-bold text-blue-600">{topCollegeClub.actual_count}</div>
+                        <div className="text-2xl font-bold text-blue-600">{topCollegeClub.achieved_registrations}</div>
                       </div>
                     </div>
                   )}
@@ -186,7 +191,9 @@ export default async function RegcomDashboard() {
                             Group {topCommunityClub.group_number}
                           </Badge>
                         </div>
-                        <div className="text-2xl font-bold text-green-600">{topCommunityClub.actual_count}</div>
+                        <div className="text-2xl font-bold text-green-600">
+                          {topCommunityClub.achieved_registrations}
+                        </div>
                       </div>
                     </div>
                   )}
@@ -203,13 +210,14 @@ export default async function RegcomDashboard() {
             <CardContent>
               <div className="space-y-4">
                 {groupTotals.map((group) => {
-                  const percentage = Math.round((group.actual_total / group.estimated_total) * 100)
+                  const percentage =
+                    group.target_total > 0 ? Math.round((group.achieved_total / group.target_total) * 100) : 0
                   return (
                     <div key={group.group_number} className="space-y-2">
                       <div className="flex justify-between items-center">
                         <span className="text-sm font-medium">Group {group.group_number}</span>
                         <span className="text-sm text-gray-500">
-                          {group.actual_total} / {group.estimated_total} ({percentage}%)
+                          {group.achieved_total} / {group.target_total} ({percentage}%)
                         </span>
                       </div>
                       <div className="w-full bg-gray-200 rounded-full h-2">
@@ -260,12 +268,12 @@ export default async function RegcomDashboard() {
                           <Badge className="bg-green-100 text-green-800">External</Badge>
                         </div>
                         <div className="flex items-center space-x-6 text-sm text-gray-600">
-                          <span>Estimated: {club.estimated_count}</span>
-                          <span>Actual: {club.actual_count}</span>
+                          <span>Target: {club.target_registrations}</span>
+                          <span>Achieved: {club.achieved_registrations}</span>
                           <span>
                             Progress:{" "}
-                            {club.estimated_count > 0
-                              ? Math.round((club.actual_count / club.estimated_count) * 100)
+                            {club.target_registrations > 0
+                              ? Math.round((club.achieved_registrations / club.target_registrations) * 100)
                               : 0}
                             %
                           </span>
@@ -290,16 +298,18 @@ export default async function RegcomDashboard() {
                   <h4 className="font-semibold">Registration Summary</h4>
                   <div className="space-y-2 text-sm">
                     <div className="flex justify-between">
-                      <span>Total Estimated:</span>
-                      <span className="font-medium">{districtEstimated}</span>
+                      <span>Total Target:</span>
+                      <span className="font-medium">{districtTarget}</span>
                     </div>
                     <div className="flex justify-between">
-                      <span>Total Actual:</span>
-                      <span className="font-medium">{districtActual}</span>
+                      <span>Total Achieved:</span>
+                      <span className="font-medium">{districtAchieved}</span>
                     </div>
                     <div className="flex justify-between">
                       <span>Completion Rate:</span>
-                      <span className="font-medium">{Math.round((districtActual / districtEstimated) * 100)}%</span>
+                      <span className="font-medium">
+                        {districtTarget > 0 ? Math.round((districtAchieved / districtTarget) * 100) : 0}%
+                      </span>
                     </div>
                     <div className="flex justify-between">
                       <span>External Clubs:</span>
