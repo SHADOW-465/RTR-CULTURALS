@@ -39,8 +39,8 @@ export function DashboardLayout({ children, title, userRole }: DashboardLayoutPr
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center space-x-4">
               <div className="flex items-center space-x-2">
-                <BarChart3 className="w-8 h-8 text-secondary" />
-                <h1 className="text-xl font-bold text-secondary">JOSH District Culturals 2025</h1>
+                <BarChart3 className="w-8 h-8 text-secondary soft-glow" />
+                <h1 className="text-xl font-bold text-secondary soft-glow">JOSH District Culturals 2025</h1>
               </div>
               {userRole && (
                 <span className="px-3 py-1 text-xs font-medium bg-primary/20 text-primary-foreground rounded-full capitalize border border-primary/30">
@@ -61,7 +61,7 @@ export function DashboardLayout({ children, title, userRole }: DashboardLayoutPr
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="mb-8">
-          <h2 className="text-3xl font-bold text-secondary">{title}</h2>
+          <h2 className="text-3xl font-bold text-secondary soft-glow">{title}</h2>
         </div>
         {children}
       </main>
