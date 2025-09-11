@@ -28,8 +28,8 @@ export function AddClubDialog({ groupNumber, userRole }: AddClubDialogProps) {
   const [clubName, setClubName] = useState("")
   const [clubType, setClubType] = useState("")
   const [selectedGroup, setSelectedGroup] = useState<string | undefined>(groupNumber?.toString())
-  const [estimatedCount, setEstimatedCount] = useState("")
-  const [actualCount, setActualCount] = useState("")
+  const [targetRegistrations, setTargetRegistrations] = useState("")
+  const [achievedRegistrations, setAchievedRegistrations] = useState("")
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const router = useRouter()
@@ -64,8 +64,8 @@ export function AddClubDialog({ groupNumber, userRole }: AddClubDialogProps) {
           name: clubName,
           type: clubType,
           group_number: Number.parseInt(selectedGroup),
-          estimated_count: Number.parseInt(estimatedCount) || 0,
-          actual_count: Number.parseInt(actualCount) || 0,
+          target_registrations: Number.parseInt(targetRegistrations) || 0,
+          achieved_registrations: Number.parseInt(achievedRegistrations) || 0,
         }),
       })
 
@@ -77,8 +77,8 @@ export function AddClubDialog({ groupNumber, userRole }: AddClubDialogProps) {
       // Reset form
       setClubName("")
       setClubType("")
-      setEstimatedCount("")
-      setActualCount("")
+      setTargetRegistrations("")
+      setAchievedRegistrations("")
       if (!groupNumber) setSelectedGroup(undefined)
       setOpen(false)
 
@@ -156,24 +156,24 @@ export function AddClubDialog({ groupNumber, userRole }: AddClubDialogProps) {
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="estimatedCount">Estimated Count</Label>
+                <Label htmlFor="targetRegistrations">Target Registrations</Label>
                 <Input
-                  id="estimatedCount"
+                  id="targetRegistrations"
                   type="number"
                   placeholder="0"
-                  value={estimatedCount}
-                  onChange={(e) => setEstimatedCount(e.target.value)}
+                  value={targetRegistrations}
+                  onChange={(e) => setTargetRegistrations(e.target.value)}
                   min="0"
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="actualCount">Actual Count</Label>
+                <Label htmlFor="achievedRegistrations">Achieved Registrations</Label>
                 <Input
-                  id="actualCount"
+                  id="achievedRegistrations"
                   type="number"
                   placeholder="0"
-                  value={actualCount}
-                  onChange={(e) => setActualCount(e.target.value)}
+                  value={achievedRegistrations}
+                  onChange={(e) => setAchievedRegistrations(e.target.value)}
                   min="0"
                 />
               </div>

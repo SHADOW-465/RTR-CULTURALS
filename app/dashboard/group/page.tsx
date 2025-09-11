@@ -9,19 +9,9 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Users, Target, Building, Home } from "lucide-react"
 
-interface Club {
-  id: string
-  name: string
-  type: string
-  estimated_count: number
-  actual_count: number
-  created_at: string
-}
-
 export default async function GroupDashboard() {
   const user = await getCurrentUser()
 
-  // Check if user has group role
   if (!user.role.startsWith("group")) {
     redirect("/auth/login")
   }
@@ -35,17 +25,38 @@ export default async function GroupDashboard() {
 
   const groupNumber = getGroupNumber(user.role)
 
-  // Get clubs for this group
-  const { data: clubs } = await supabase
+  const { data: clubsData, error } = await supabase
     .from("clubs")
-    .select("*")
+    .select(
+      `
+      id,
+      name,
+      type,
+      group_number,
+      club_registrations (
+        target_registrations,
+        achieved_registrations
+      )
+    `
+    )
     .eq("group_number", groupNumber)
     .order("created_at", { ascending: false })
 
-  const totalEstimated = clubs?.reduce((sum, club) => sum + club.estimated_count, 0) || 0
-  const totalActual = clubs?.reduce((sum, club) => sum + club.actual_count, 0) || 0
-  const collegeClubs = clubs?.filter((club) => club.type === "college") || []
-  const communityClubs = clubs?.filter((club) => club.type === "community") || []
+  if (error) {
+    console.error("Error fetching group clubs data:", error)
+    return <div>Error loading data.</div>
+  }
+
+  const clubs = clubsData.map((club) => ({
+    ...club,
+    target_registrations: club.club_registrations[0]?.target_registrations || 0,
+    achieved_registrations: club.club_registrations[0]?.achieved_registrations || 0,
+  }))
+
+  const totalTarget = clubs.reduce((sum, club) => sum + club.target_registrations, 0)
+  const totalAchieved = clubs.reduce((sum, club) => sum + club.achieved_registrations, 0)
+  const collegeClubs = clubs.filter((club) => club.type === "college")
+  const communityClubs = clubs.filter((club) => club.type === "community")
 
   return (
     <DashboardLayout title={`${user.group_name} Dashboard`} userRole={user.role}>
@@ -58,11 +69,11 @@ export default async function GroupDashboard() {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
         <StatsCard
           title="Group Target"
-          value={`${totalActual}/${totalEstimated}`}
-          subtitle={`${totalEstimated > 0 ? Math.round((totalActual / totalEstimated) * 100) : 0}% completed`}
+          value={`${totalAchieved}/${totalTarget}`}
+          subtitle={`${totalTarget > 0 ? Math.round((totalAchieved / totalTarget) * 100) : 0}% completed`}
           icon={Target}
         />
-        <StatsCard title="Total Clubs" value={clubs?.length || 0} subtitle="Registered clubs" icon={Users} />
+        <StatsCard title="Total Clubs" value={clubs.length} subtitle="Registered clubs" icon={Users} />
         <StatsCard
           title="College Clubs"
           value={collegeClubs.length}
@@ -88,12 +99,12 @@ export default async function GroupDashboard() {
           <CardTitle className="flex items-center justify-between text-secondary">
             <span>Club Registrations</span>
             <Badge variant="outline" className="border-secondary text-muted-foreground">
-              {clubs?.length || 0} clubs
+              {clubs.length} clubs
             </Badge>
           </CardTitle>
         </CardHeader>
         <CardContent>
-          {!clubs || clubs.length === 0 ? (
+          {clubs.length === 0 ? (
             <div className="text-center py-8 text-muted-foreground">
               <Users className="w-12 h-12 mx-auto mb-4 text-muted-foreground/50" />
               <p>No clubs registered yet.</p>
@@ -122,12 +133,12 @@ export default async function GroupDashboard() {
                         </div>
                         <div className="flex items-center space-x-6 text-sm text-muted-foreground">
                           <span className="font-medium text-secondary">
-                            Target: {club.actual_count}/{club.estimated_count}
+                            Target: {club.achieved_registrations}/{club.target_registrations}
                           </span>
                           <span>
                             Progress:{" "}
-                            {club.estimated_count > 0
-                              ? Math.round((club.actual_count / club.estimated_count) * 100)
+                            {club.target_registrations > 0
+                              ? Math.round((club.achieved_registrations / club.target_registrations) * 100)
                               : 0}
                             %
                           </span>
@@ -162,12 +173,12 @@ export default async function GroupDashboard() {
                         </div>
                         <div className="flex items-center space-x-6 text-sm text-muted-foreground">
                           <span className="font-medium text-secondary">
-                            Target: {club.actual_count}/{club.estimated_count}
+                            Target: {club.achieved_registrations}/{club.target_registrations}
                           </span>
                           <span>
                             Progress:{" "}
-                            {club.estimated_count > 0
-                              ? Math.round((club.actual_count / club.estimated_count) * 100)
+                            {club.target_registrations > 0
+                              ? Math.round((club.achieved_registrations / club.target_registrations) * 100)
                               : 0}
                             %
                           </span>
@@ -186,7 +197,7 @@ export default async function GroupDashboard() {
       </Card>
 
       {/* Progress Summary */}
-      {clubs && clubs.length > 0 && (
+      {clubs.length > 0 && (
         <Card className="mt-6">
           <CardHeader>
             <CardTitle className="text-secondary">Registration Progress</CardTitle>
@@ -196,15 +207,15 @@ export default async function GroupDashboard() {
               <div className="flex justify-between items-center">
                 <span className="text-sm font-medium">Overall Progress</span>
                 <span className="text-sm text-muted-foreground">
-                  {totalActual} / {totalEstimated} (
-                  {totalEstimated > 0 ? Math.round((totalActual / totalEstimated) * 100) : 0}%)
+                  {totalAchieved} / {totalTarget} (
+                  {totalTarget > 0 ? Math.round((totalAchieved / totalTarget) * 100) : 0}%)
                 </span>
               </div>
               <div className="w-full bg-muted rounded-full h-3">
                 <div
                   className="bg-gradient-to-r from-primary to-secondary h-3 rounded-full transition-all duration-300"
                   style={{
-                    width: `${totalEstimated > 0 ? Math.min((totalActual / totalEstimated) * 100, 100) : 0}%`,
+                    width: `${totalTarget > 0 ? Math.min((totalAchieved / totalTarget) * 100, 100) : 0}%`,
                   }}
                 />
               </div>
