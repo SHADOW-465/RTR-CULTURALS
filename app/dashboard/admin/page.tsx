@@ -256,7 +256,7 @@ export default async function AdminDashboard() {
         <CardHeader>
           <div className="flex items-center justify-between">
             <CardTitle className="text-secondary">Club Management</CardTitle>
-            <AddClubDialog />
+            <AddClubDialog userRole={user.role} />
           </div>
         </CardHeader>
         <CardContent className="space-y-6">
