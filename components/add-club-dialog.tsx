@@ -1,7 +1,7 @@
 "use client"
 
 import type React from "react"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import {
@@ -19,21 +19,37 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Plus } from "lucide-react"
 
 interface AddClubDialogProps {
-  groupNumber: number
+  groupNumber?: number
 }
 
 export function AddClubDialog({ groupNumber }: AddClubDialogProps) {
   const [open, setOpen] = useState(false)
   const [clubName, setClubName] = useState("")
   const [clubType, setClubType] = useState("")
+  const [selectedGroup, setSelectedGroup] = useState<string | undefined>(groupNumber?.toString())
   const [estimatedCount, setEstimatedCount] = useState("")
   const [actualCount, setActualCount] = useState("")
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const router = useRouter()
 
+  // For admins, reset selected group when dialog reopens
+  useEffect(() => {
+    if (open && !groupNumber) {
+      setSelectedGroup(undefined)
+    } else {
+      setSelectedGroup(groupNumber?.toString())
+    }
+  }, [open, groupNumber])
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+
+    if (!selectedGroup) {
+      setError("Please select a group.")
+      return
+    }
+
     setIsLoading(true)
     setError(null)
 
@@ -46,7 +62,7 @@ export function AddClubDialog({ groupNumber }: AddClubDialogProps) {
         body: JSON.stringify({
           name: clubName,
           type: clubType,
-          group_number: groupNumber,
+          group_number: Number.parseInt(selectedGroup),
           estimated_count: Number.parseInt(estimatedCount) || 0,
           actual_count: Number.parseInt(actualCount) || 0,
         }),
@@ -62,6 +78,7 @@ export function AddClubDialog({ groupNumber }: AddClubDialogProps) {
       setClubType("")
       setEstimatedCount("")
       setActualCount("")
+      if (!groupNumber) setSelectedGroup(undefined)
       setOpen(false)
 
       // Refresh the page to show new club
@@ -76,42 +93,56 @@ export function AddClubDialog({ groupNumber }: AddClubDialogProps) {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button className="bg-primary hover:bg-primary/90 text-primary-foreground">
+        <Button>
           <Plus className="w-4 h-4 mr-2" />
           Add Club
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[425px] bg-card border-border">
+      <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle className="golden-glow">Add New Club</DialogTitle>
-          <DialogDescription className="text-muted-foreground">
-            Add a new club to Group {groupNumber}. Fill in all the details below.
+          <DialogTitle className="text-secondary">Add New Club</DialogTitle>
+          <DialogDescription>
+            {groupNumber
+              ? `Add a new club to Group ${groupNumber}. Fill in the details below.`
+              : "Add a new club to the district. Fill in all the details below."}
           </DialogDescription>
         </DialogHeader>
         <form onSubmit={handleSubmit}>
           <div className="grid gap-4 py-4">
+            {!groupNumber && (
+              <div className="space-y-2">
+                <Label htmlFor="groupNumber">Group Number</Label>
+                <Select value={selectedGroup} onValueChange={setSelectedGroup} required>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select a group" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {[1, 2, 3, 4, 5].map((num) => (
+                      <SelectItem key={num} value={num.toString()}>
+                        Group {num}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+            )}
             <div className="space-y-2">
-              <Label htmlFor="clubName" className="text-foreground">
-                Club Name
-              </Label>
+              <Label htmlFor="clubName">Club Name</Label>
               <Input
                 id="clubName"
                 placeholder="e.g., Rotaract Club of ABC College"
                 value={clubName}
                 onChange={(e) => setClubName(e.target.value)}
                 required
-                className="bg-input border-border text-foreground"
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="clubType" className="text-foreground">
-                Club Type
-              </Label>
+              <Label htmlFor="clubType">Club Type</Label>
               <Select value={clubType} onValueChange={setClubType} required>
-                <SelectTrigger className="bg-input border-border text-foreground">
+                <SelectTrigger>
                   <SelectValue placeholder="Select club type" />
                 </SelectTrigger>
-                <SelectContent className="bg-popover border-border">
+                <SelectContent>
                   <SelectItem value="college">College</SelectItem>
                   <SelectItem value="community">Community</SelectItem>
                 </SelectContent>
@@ -119,9 +150,7 @@ export function AddClubDialog({ groupNumber }: AddClubDialogProps) {
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="estimatedCount" className="text-foreground">
-                  Estimated Count
-                </Label>
+                <Label htmlFor="estimatedCount">Estimated Count</Label>
                 <Input
                   id="estimatedCount"
                   type="number"
@@ -129,13 +158,10 @@ export function AddClubDialog({ groupNumber }: AddClubDialogProps) {
                   value={estimatedCount}
                   onChange={(e) => setEstimatedCount(e.target.value)}
                   min="0"
-                  className="bg-input border-border text-foreground"
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="actualCount" className="text-foreground">
-                  Actual Count
-                </Label>
+                <Label htmlFor="actualCount">Actual Count</Label>
                 <Input
                   id="actualCount"
                   type="number"
@@ -143,17 +169,16 @@ export function AddClubDialog({ groupNumber }: AddClubDialogProps) {
                   value={actualCount}
                   onChange={(e) => setActualCount(e.target.value)}
                   min="0"
-                  className="bg-input border-border text-foreground"
                 />
               </div>
             </div>
           </div>
           {error && <div className="text-sm text-destructive mb-4">{error}</div>}
           <DialogFooter>
-            <Button type="button" variant="outline" onClick={() => setOpen(false)} className="border-border">
+            <Button type="button" variant="outline" onClick={() => setOpen(false)}>
               Cancel
             </Button>
-            <Button type="submit" disabled={isLoading} className="bg-primary hover:bg-primary/90">
+            <Button type="submit" disabled={isLoading}>
               {isLoading ? "Adding..." : "Add Club"}
             </Button>
           </DialogFooter>

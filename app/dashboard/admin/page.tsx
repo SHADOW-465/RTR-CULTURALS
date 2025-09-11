@@ -5,7 +5,9 @@ import { DashboardLayout } from "@/components/dashboard-layout"
 import { StatsCard } from "@/components/stats-card"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { Users, Target, Trophy, Calendar, Clock } from "lucide-react"
+import { Users, Target, Trophy, Calendar, Clock, Building, Home } from "lucide-react"
+import { AddClubDialog } from "@/components/add-club-dialog"
+import { EditClubDialog } from "@/components/edit-club-dialog"
 
 interface GroupStats {
   group_number: number
@@ -46,8 +48,10 @@ export default async function AdminDashboard() {
   }
 
   // Calculate district totals
-  const districtEstimated = groupTotals.reduce((sum, group) => sum + group.estimated_total, 0)
+  const districtEstimated = 3500
   const districtActual = groupTotals.reduce((sum, group) => sum + group.actual_total, 0)
+
+  const { count: totalClubs } = await supabase.from("clubs").select("id", { count: "exact", head: true })
 
   const completionRate = districtEstimated > 0 ? Math.round((districtActual / districtEstimated) * 100) : 0
   const endDate = new Date("2025-12-31") // Assuming end date
@@ -68,6 +72,11 @@ export default async function AdminDashboard() {
     .order("actual_count", { ascending: false })
     .limit(3)
 
+  const { data: allClubs } = await supabase.from("clubs").select("*").order("name", { ascending: true })
+
+  const collegeClubsList = allClubs?.filter((club) => club.type === "college") || []
+  const communityClubsList = allClubs?.filter((club) => club.type === "community") || []
+
   return (
     <DashboardLayout title="Admin Dashboard" userRole="admin">
       <div className="mb-8">
@@ -79,7 +88,7 @@ export default async function AdminDashboard() {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
         <StatsCard
           title="Total Clubs"
-          value="3233"
+          value={totalClubs ?? 0}
           subtitle="Across district"
           icon={Users}
           className="border-secondary"
@@ -238,6 +247,65 @@ export default async function AdminDashboard() {
                 </div>
               )
             })}
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Club Management Section */}
+      <Card className="mt-6">
+        <CardHeader>
+          <div className="flex items-center justify-between">
+            <CardTitle className="text-secondary">Club Management</CardTitle>
+            <AddClubDialog />
+          </div>
+        </CardHeader>
+        <CardContent className="space-y-6">
+          {/* College Clubs List */}
+          <div>
+            <h3 className="text-lg font-medium text-foreground mb-4 flex items-center">
+              <Building className="w-5 h-5 mr-2" />
+              College Clubs ({collegeClubsList.length})
+            </h3>
+            <div className="space-y-4">
+              {collegeClubsList.map((club) => (
+                <div
+                  key={club.id}
+                  className="flex items-center justify-between p-4 bg-muted/50 rounded-lg border border-border/50"
+                >
+                  <div>
+                    <p className="font-semibold">{club.name}</p>
+                    <p className="text-sm text-muted-foreground">
+                      Group {club.group_number} | Target: {club.actual_count}/{club.estimated_count}
+                    </p>
+                  </div>
+                  <EditClubDialog club={club} />
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Community Clubs List */}
+          <div>
+            <h3 className="text-lg font-medium text-foreground mb-4 flex items-center">
+              <Home className="w-5 h-5 mr-2" />
+              Community Clubs ({communityClubsList.length})
+            </h3>
+            <div className="space-y-4">
+              {communityClubsList.map((club) => (
+                <div
+                  key={club.id}
+                  className="flex items-center justify-between p-4 bg-muted/50 rounded-lg border border-border/50"
+                >
+                  <div>
+                    <p className="font-semibold">{club.name}</p>
+                    <p className="text-sm text-muted-foreground">
+                      Group {club.group_number} | Target: {club.actual_count}/{club.estimated_count}
+                    </p>
+                  </div>
+                  <EditClubDialog club={club} />
+                </div>
+              ))}
+            </div>
           </div>
         </CardContent>
       </Card>
