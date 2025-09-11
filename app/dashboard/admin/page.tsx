@@ -127,27 +127,37 @@ export default async function AdminDashboard() {
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
-              {groupTotals.map((group) => (
-                <div
-                  key={group.group_number}
-                  className="flex items-center justify-between p-3 bg-muted/50 rounded-lg border border-border/50"
-                >
-                  <div className="flex items-center space-x-3">
-                    <Badge variant="outline" className="border-secondary text-muted-foreground">
-                      Group {group.group_number}
-                    </Badge>
-                    <span className="text-sm text-muted-foreground">{group.club_count} clubs</span>
-                  </div>
-                  <div className="text-right">
-                    <div className="font-semibold text-foreground">
-                      {group.actual_total}/{group.estimated_total}
+              {groupTotals.map((group) => {
+                const percentage =
+                  group.estimated_total > 0 ? Math.round((group.actual_total / group.estimated_total) * 100) : 0
+                return (
+                  <div
+                    key={group.group_number}
+                    className="p-3 bg-muted/50 rounded-lg border border-border/50 space-y-2"
+                  >
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center space-x-3">
+                        <Badge variant="outline" className="border-secondary text-muted-foreground">
+                          Group {group.group_number}
+                        </Badge>
+                        <span className="text-sm text-muted-foreground">{group.club_count} clubs</span>
+                      </div>
+                      <div className="text-right">
+                        <div className="font-semibold text-foreground">
+                          {group.actual_total}/{group.estimated_total}
+                        </div>
+                        <div className="text-xs text-muted-foreground">{percentage}% complete</div>
+                      </div>
                     </div>
-                    <div className="text-xs text-muted-foreground">
-                      {Math.round((group.actual_total / group.estimated_total) * 100)}% complete
+                    <div className="w-full bg-muted rounded-full h-3">
+                      <div
+                        className="bg-gradient-to-r from-primary to-secondary h-3 rounded-full transition-all duration-300"
+                        style={{ width: `${Math.min(percentage, 100)}%` }}
+                      />
                     </div>
                   </div>
-                </div>
-              ))}
+                )
+              })}
             </div>
           </CardContent>
         </Card>
@@ -220,36 +230,6 @@ export default async function AdminDashboard() {
           </CardContent>
         </Card>
       </div>
-
-      {/* Progress Visualization */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-secondary">Registration Progress by Group</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="space-y-4">
-            {groupTotals.map((group) => {
-              const percentage = Math.round((group.actual_total / group.estimated_total) * 100)
-              return (
-                <div key={group.group_number} className="space-y-2">
-                  <div className="flex justify-between items-center">
-                    <span className="text-sm font-medium text-foreground">Group {group.group_number}</span>
-                    <span className="text-sm text-muted-foreground">
-                      {group.actual_total}/{group.estimated_total} ({percentage}%)
-                    </span>
-                  </div>
-                  <div className="w-full bg-muted rounded-full h-3">
-                    <div
-                      className="bg-gradient-to-r from-primary to-secondary h-3 rounded-full transition-all duration-300"
-                      style={{ width: `${Math.min(percentage, 100)}%` }}
-                    />
-                  </div>
-                </div>
-              )
-            })}
-          </div>
-        </CardContent>
-      </Card>
 
       {/* Club Management Section */}
       <Card className="mt-6">
