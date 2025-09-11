@@ -2,7 +2,7 @@
 
 import type React from "react"
 
-import { createClient } from "@/lib/supabase/client"
+import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import {
   Dialog,
@@ -40,6 +40,7 @@ export function EditClubDialog({ club }: EditClubDialogProps) {
   const [achievedRegistrations, setAchievedRegistrations] = useState(club.achieved_registrations.toString())
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const router = useRouter()
 
   useEffect(() => {
     setClubName(club.name)
@@ -73,8 +74,7 @@ export function EditClubDialog({ club }: EditClubDialogProps) {
       }
 
       setOpen(false)
-      // Refresh data on the page
-      window.location.reload()
+      router.refresh()
     } catch (error: unknown) {
       setError(error instanceof Error ? error.message : "An error occurred")
     } finally {

@@ -27,6 +27,7 @@ export async function POST(request: NextRequest) {
     // Insert into club_registrations table
     const { error: registrationError } = await supabase.from("club_registrations").insert({
       club_id: clubData.id,
+      group_number: group_number,
       target_registrations: target_registrations || 0,
       achieved_registrations: achieved_registrations || 0,
     })
@@ -72,6 +73,7 @@ export async function PUT(request: NextRequest) {
     const { error: registrationError } = await supabase
       .from("club_registrations")
       .update({
+        group_number: group_number,
         target_registrations: target_registrations || 0,
         achieved_registrations: achieved_registrations || 0,
       })
