@@ -49,22 +49,41 @@ export default async function GroupDashboard() {
 
   return (
     <DashboardLayout title={`${user.group_name} Dashboard`} userRole={user.role}>
+      <div className="mb-8">
+        <h1 className="text-2xl font-bold golden-glow mb-2">{user.group_name}</h1>
+        <p className="text-muted-foreground">JOSH District Culturals 2025</p>
+      </div>
+
       {/* Group Stats */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
         <StatsCard
           title="Group Target"
-          value={`${totalActual} / ${totalEstimated}`}
+          value={`${totalActual}/${totalEstimated}`}
           subtitle={`${totalEstimated > 0 ? Math.round((totalActual / totalEstimated) * 100) : 0}% completed`}
           icon={Target}
+          className="bg-gradient-to-br from-card to-primary/10 border-primary/20"
         />
-        <StatsCard title="Total Clubs" value={clubs?.length || 0} subtitle="Registered clubs" icon={Users} />
+        <StatsCard
+          title="Total Clubs"
+          value={clubs?.length || 0}
+          subtitle="Registered clubs"
+          icon={Users}
+          className="bg-gradient-to-br from-card to-secondary/10 border-secondary/20"
+        />
         <StatsCard
           title="College Clubs"
           value={collegeClubs.length}
           subtitle="Educational institutions"
           icon={Building}
+          className="bg-gradient-to-br from-card to-accent/10 border-accent/20"
         />
-        <StatsCard title="Community Clubs" value={communityClubs.length} subtitle="Community based" icon={Home} />
+        <StatsCard
+          title="Community Clubs"
+          value={communityClubs.length}
+          subtitle="Community based"
+          icon={Home}
+          className="bg-gradient-to-br from-card to-chart-1/10 border-chart-1/20"
+        />
       </div>
 
       {/* Add Club Section */}
@@ -73,34 +92,47 @@ export default async function GroupDashboard() {
       </div>
 
       {/* Clubs List */}
-      <Card>
+      <Card className="bg-gradient-to-br from-card to-primary/5 border-primary/20">
         <CardHeader>
-          <CardTitle className="flex items-center justify-between">
+          <CardTitle className="flex items-center justify-between golden-glow">
             <span>Club Registrations</span>
-            <Badge variant="outline">{clubs?.length || 0} clubs</Badge>
+            <Badge variant="outline" className="border-secondary text-secondary">
+              {clubs?.length || 0} clubs
+            </Badge>
           </CardTitle>
         </CardHeader>
         <CardContent>
           {!clubs || clubs.length === 0 ? (
-            <div className="text-center py-8 text-gray-500">
-              <Users className="w-12 h-12 mx-auto mb-4 text-gray-300" />
+            <div className="text-center py-8 text-muted-foreground">
+              <Users className="w-12 h-12 mx-auto mb-4 text-muted-foreground/50" />
               <p>No clubs registered yet.</p>
               <p className="text-sm">Click "Add Club" to get started.</p>
             </div>
           ) : (
             <div className="space-y-4">
               {clubs.map((club) => (
-                <div key={club.id} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+                <div
+                  key={club.id}
+                  className="flex items-center justify-between p-4 bg-muted/50 rounded-lg border border-border/50"
+                >
                   <div className="flex-1">
                     <div className="flex items-center space-x-3 mb-2">
-                      <h3 className="font-medium text-gray-900">{club.name}</h3>
-                      <Badge variant={club.type === "college" ? "default" : "secondary"}>
+                      <h3 className="font-medium text-foreground">{club.name}</h3>
+                      <Badge
+                        variant={club.type === "college" ? "default" : "secondary"}
+                        className={
+                          club.type === "college"
+                            ? "bg-primary text-primary-foreground"
+                            : "bg-secondary text-secondary-foreground"
+                        }
+                      >
                         {club.type === "college" ? "College" : "Community"}
                       </Badge>
                     </div>
-                    <div className="flex items-center space-x-6 text-sm text-gray-600">
-                      <span>Estimated: {club.estimated_count}</span>
-                      <span>Actual: {club.actual_count}</span>
+                    <div className="flex items-center space-x-6 text-sm text-muted-foreground">
+                      <span className="font-medium text-secondary">
+                        Target: {club.estimated_count}/{club.actual_count}
+                      </span>
                       <span>
                         Progress:{" "}
                         {club.estimated_count > 0 ? Math.round((club.actual_count / club.estimated_count) * 100) : 0}%

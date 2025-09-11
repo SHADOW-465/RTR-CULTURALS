@@ -5,7 +5,7 @@ import { DashboardLayout } from "@/components/dashboard-layout"
 import { StatsCard } from "@/components/stats-card"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { Users, Target, Trophy, TrendingUp } from "lucide-react"
+import { Users, Target, Trophy, Calendar, Clock } from "lucide-react"
 
 interface GroupStats {
   group_number: number
@@ -49,53 +49,69 @@ export default async function AdminDashboard() {
   const districtEstimated = groupTotals.reduce((sum, group) => sum + group.estimated_total, 0)
   const districtActual = groupTotals.reduce((sum, group) => sum + group.actual_total, 0)
 
-  // Get top clubs
-  const { data: topCollegeClub } = await supabase
+  const completionRate = districtEstimated > 0 ? Math.round((districtActual / districtEstimated) * 100) : 0
+  const endDate = new Date("2025-12-31") // Assuming end date
+  const today = new Date()
+  const daysLeft = Math.ceil((endDate.getTime() - today.getTime()) / (1000 * 60 * 60 * 24))
+
+  const { data: topCollegeClubs } = await supabase
     .from("clubs")
     .select("name, actual_count, group_number")
     .eq("type", "college")
     .order("actual_count", { ascending: false })
-    .limit(1)
-    .single()
+    .limit(3)
 
-  const { data: topCommunityClub } = await supabase
+  const { data: topCommunityClubs } = await supabase
     .from("clubs")
     .select("name, actual_count, group_number")
     .eq("type", "community")
     .order("actual_count", { ascending: false })
-    .limit(1)
-    .single()
+    .limit(3)
 
   return (
     <DashboardLayout title="Admin Dashboard" userRole="admin">
+      <div className="mb-8">
+        <h1 className="text-3xl font-bold golden-glow mb-2">JOSH District Culturals 2025</h1>
+        <p className="text-muted-foreground">Registration Portal Dashboard</p>
+      </div>
+
       {/* District Overview */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
         <StatsCard
-          title="District Target"
-          value={`${districtActual} / ${districtEstimated}`}
-          subtitle={`${Math.round((districtActual / districtEstimated) * 100)}% completed`}
-          icon={Target}
+          title="Total Clubs"
+          value="3233"
+          subtitle="Across district"
+          icon={Users}
+          className="bg-gradient-to-br from-card to-primary/10 border-primary/20"
         />
-        <StatsCard title="Total Clubs" value={groupStats?.length || 0} subtitle="Across all groups" icon={Users} />
         <StatsCard
           title="Completion Rate"
-          value={`${Math.round((districtActual / districtEstimated) * 100)}%`}
-          subtitle="Overall progress"
-          icon={TrendingUp}
+          value={`${completionRate}%`}
+          subtitle={`${districtActual}/${districtEstimated} registered`}
+          icon={Target}
+          className="bg-gradient-to-br from-card to-secondary/10 border-secondary/20"
         />
         <StatsCard
-          title="Top Performance"
-          value={topCollegeClub?.actual_count || 0}
-          subtitle="Highest registrations"
-          icon={Trophy}
+          title="Days Remaining"
+          value={daysLeft > 0 ? daysLeft : 0}
+          subtitle="To complete target"
+          icon={Clock}
+          className="bg-gradient-to-br from-card to-accent/10 border-accent/20"
+        />
+        <StatsCard
+          title="Registration Progress"
+          value={`${districtActual}`}
+          subtitle="Total registrations"
+          icon={Calendar}
+          className="bg-gradient-to-br from-card to-chart-1/10 border-chart-1/20"
         />
       </div>
 
       {/* Group Performance */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-        <Card>
+        <Card className="bg-gradient-to-br from-card to-primary/5 border-primary/20">
           <CardHeader>
-            <CardTitle className="flex items-center space-x-2">
+            <CardTitle className="flex items-center space-x-2 golden-glow">
               <Users className="w-5 h-5" />
               <span>Group Performance</span>
             </CardTitle>
@@ -103,16 +119,21 @@ export default async function AdminDashboard() {
           <CardContent>
             <div className="space-y-4">
               {groupTotals.map((group) => (
-                <div key={group.group_number} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                <div
+                  key={group.group_number}
+                  className="flex items-center justify-between p-3 bg-muted/50 rounded-lg border border-border/50"
+                >
                   <div className="flex items-center space-x-3">
-                    <Badge variant="outline">Group {group.group_number}</Badge>
-                    <span className="text-sm text-gray-600">{group.club_count} clubs</span>
+                    <Badge variant="outline" className="border-secondary text-secondary">
+                      Group {group.group_number}
+                    </Badge>
+                    <span className="text-sm text-muted-foreground">{group.club_count} clubs</span>
                   </div>
                   <div className="text-right">
-                    <div className="font-semibold">
-                      {group.actual_total} / {group.estimated_total}
+                    <div className="font-semibold text-secondary">
+                      {group.actual_total}/{group.estimated_total}
                     </div>
-                    <div className="text-xs text-gray-500">
+                    <div className="text-xs text-muted-foreground">
                       {Math.round((group.actual_total / group.estimated_total) * 100)}% complete
                     </div>
                   </div>
@@ -122,53 +143,79 @@ export default async function AdminDashboard() {
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="bg-gradient-to-br from-card to-secondary/5 border-secondary/20">
           <CardHeader>
-            <CardTitle className="flex items-center space-x-2">
+            <CardTitle className="flex items-center space-x-2 golden-glow">
               <Trophy className="w-5 h-5" />
               <span>Top Performers</span>
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="space-y-4">
-              {topCollegeClub && (
-                <div className="p-3 bg-blue-50 rounded-lg">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <div className="font-medium text-blue-900">Highest College-Based Club</div>
-                      <div className="text-sm text-blue-700">{topCollegeClub.name}</div>
-                      <Badge variant="secondary" className="mt-1">
-                        Group {topCollegeClub.group_number}
-                      </Badge>
+            <div className="space-y-6">
+              <div>
+                <h4 className="font-medium text-secondary mb-3">Top College-Based Clubs</h4>
+                <div className="space-y-2">
+                  {topCollegeClubs?.slice(0, 3).map((club, index) => (
+                    <div
+                      key={club.name}
+                      className="flex items-center justify-between p-2 bg-primary/10 rounded border border-primary/20"
+                    >
+                      <div className="flex items-center space-x-2">
+                        <Badge
+                          variant="secondary"
+                          className="w-6 h-6 rounded-full p-0 flex items-center justify-center text-xs"
+                        >
+                          {index + 1}
+                        </Badge>
+                        <div>
+                          <div className="font-medium text-sm">{club.name}</div>
+                          <Badge variant="outline" className="text-xs">
+                            Group {club.group_number}
+                          </Badge>
+                        </div>
+                      </div>
+                      <div className="font-bold text-primary">{club.actual_count}</div>
                     </div>
-                    <div className="text-2xl font-bold text-blue-600">{topCollegeClub.actual_count}</div>
-                  </div>
+                  ))}
                 </div>
-              )}
+              </div>
 
-              {topCommunityClub && (
-                <div className="p-3 bg-green-50 rounded-lg">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <div className="font-medium text-green-900">Highest Community-Based Club</div>
-                      <div className="text-sm text-green-700">{topCommunityClub.name}</div>
-                      <Badge variant="secondary" className="mt-1">
-                        Group {topCommunityClub.group_number}
-                      </Badge>
+              <div>
+                <h4 className="font-medium text-secondary mb-3">Top Community-Based Clubs</h4>
+                <div className="space-y-2">
+                  {topCommunityClubs?.slice(0, 3).map((club, index) => (
+                    <div
+                      key={club.name}
+                      className="flex items-center justify-between p-2 bg-accent/10 rounded border border-accent/20"
+                    >
+                      <div className="flex items-center space-x-2">
+                        <Badge
+                          variant="secondary"
+                          className="w-6 h-6 rounded-full p-0 flex items-center justify-center text-xs"
+                        >
+                          {index + 1}
+                        </Badge>
+                        <div>
+                          <div className="font-medium text-sm">{club.name}</div>
+                          <Badge variant="outline" className="text-xs">
+                            Group {club.group_number}
+                          </Badge>
+                        </div>
+                      </div>
+                      <div className="font-bold text-accent">{club.actual_count}</div>
                     </div>
-                    <div className="text-2xl font-bold text-green-600">{topCommunityClub.actual_count}</div>
-                  </div>
+                  ))}
                 </div>
-              )}
+              </div>
             </div>
           </CardContent>
         </Card>
       </div>
 
       {/* Progress Visualization */}
-      <Card>
+      <Card className="bg-gradient-to-br from-card to-chart-1/5 border-chart-1/20">
         <CardHeader>
-          <CardTitle>Registration Progress by Group</CardTitle>
+          <CardTitle className="golden-glow">Registration Progress by Group</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="space-y-4">
@@ -177,14 +224,14 @@ export default async function AdminDashboard() {
               return (
                 <div key={group.group_number} className="space-y-2">
                   <div className="flex justify-between items-center">
-                    <span className="text-sm font-medium">Group {group.group_number}</span>
-                    <span className="text-sm text-gray-500">
-                      {group.actual_total} / {group.estimated_total} ({percentage}%)
+                    <span className="text-sm font-medium text-secondary">Group {group.group_number}</span>
+                    <span className="text-sm text-muted-foreground">
+                      {group.actual_total}/{group.estimated_total} ({percentage}%)
                     </span>
                   </div>
-                  <div className="w-full bg-gray-200 rounded-full h-2">
+                  <div className="w-full bg-muted rounded-full h-3">
                     <div
-                      className="bg-blue-600 h-2 rounded-full transition-all duration-300"
+                      className="bg-gradient-to-r from-primary to-secondary h-3 rounded-full transition-all duration-300"
                       style={{ width: `${Math.min(percentage, 100)}%` }}
                     />
                   </div>
