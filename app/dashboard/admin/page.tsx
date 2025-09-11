@@ -259,11 +259,12 @@ export default async function AdminDashboard() {
             <AddClubDialog />
           </div>
         </CardHeader>
-        <CardContent className="space-y-6">
-          {/* College Clubs List */}
-          <div>
-            <h3 className="text-lg font-medium text-foreground mb-4 flex items-center">
-              <Building className="w-5 h-5 mr-2" />
+        <CardContent>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            {/* College Clubs List */}
+            <div>
+              <h3 className="text-lg font-medium text-foreground mb-4 flex items-center">
+                <Building className="w-5 h-5 mr-2" />
               College Clubs ({collegeClubsList.length})
             </h3>
             <div className="space-y-4">
@@ -307,6 +308,7 @@ export default async function AdminDashboard() {
               ))}
             </div>
           </div>
+        </div>
         </CardContent>
       </Card>
     </DashboardLayout>

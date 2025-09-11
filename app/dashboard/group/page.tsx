@@ -100,7 +100,7 @@ export default async function GroupDashboard() {
               <p className="text-sm">Click "Add Club" to get started.</p>
             </div>
           ) : (
-            <div className="space-y-6">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               {/* College Clubs List */}
               <div>
                 <h3 className="text-lg font-medium text-foreground mb-4 flex items-center">
