@@ -79,7 +79,7 @@ export default async function GroupDashboard() {
 
       {/* Add Club Section */}
       <div className="mb-6">
-        <AddClubDialog groupNumber={groupNumber} />
+        <AddClubDialog groupNumber={groupNumber} userRole={user.role} />
       </div>
 
       {/* Clubs List */}

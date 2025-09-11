@@ -20,9 +20,10 @@ import { Plus } from "lucide-react"
 
 interface AddClubDialogProps {
   groupNumber?: number
+  userRole: string
 }
 
-export function AddClubDialog({ groupNumber }: AddClubDialogProps) {
+export function AddClubDialog({ groupNumber, userRole }: AddClubDialogProps) {
   const [open, setOpen] = useState(false)
   const [clubName, setClubName] = useState("")
   const [clubType, setClubType] = useState("")
@@ -145,6 +146,11 @@ export function AddClubDialog({ groupNumber }: AddClubDialogProps) {
                 <SelectContent>
                   <SelectItem value="college">College</SelectItem>
                   <SelectItem value="community">Community</SelectItem>
+                  {/* The 'other' option is only for admins.
+                      NOTE: The database CHECK constraint for `clubs.type` only allows
+                      'college' and 'community'. Selecting 'other' will result in a
+                      database error unless the constraint is modified. */}
+                  {userRole === "admin" && <SelectItem value="other">Other</SelectItem>}
                 </SelectContent>
               </Select>
             </div>
