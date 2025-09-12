@@ -248,7 +248,7 @@ export default async function AdminDashboard() {
                   </div>
                   <div className="w-full bg-muted rounded-full h-3">
                     <div
-                      className="bg-gradient-to-r from-primary to-secondary h-3 rounded-full transition-all duration-300"
+                      className="bg-gradient-to-r from-primary to-secondary h-3 rounded-full transition-all duration-500 animate-slide-in-from-left"
                       style={{ width: `${Math.min(percentage, 100)}%` }}
                     />
                   </div>

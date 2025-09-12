@@ -1,5 +1,6 @@
 @import "tailwindcss";
 @import "tw-animate-css";
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
 
 @custom-variant dark (&:is(.dark *));
 
@@ -14,16 +15,16 @@
   --popover: #141414;
   --popover-foreground: #F9F9F9;
 
-  --primary: #E63900; /* Fiery Red for buttons/CTAs */
+  --primary: #FF4D00; /* A slightly brighter, more modern orange-red */
   --primary-foreground: #F9F9F9; /* White text on red buttons */
 
-  --secondary: #F8C646; /* Golden Yellow for headers/emphasis */
+  --secondary: #FFD700; /* A richer, more golden yellow */
   --secondary-foreground: #0A0A0A; /* Black text on yellow background */
 
-  --muted: #1f1f1f; /* Darker gray for muted backgrounds */
-  --muted-foreground: #a1a1aa; /* Lighter gray for muted text */
+  --muted: #2A2A2A; /* a slightly lighter gray for better contrast */
+  --muted-foreground: #B0B0B0; /* a lighter gray for better readability */
 
-  --accent: #F8C646; /* Golden Yellow */
+  --accent: #FFD700; /* Golden Yellow */
   --accent-foreground: #0A0A0A;
 
   --destructive: #dc2626; /* Standard red for destructive actions */
@@ -31,7 +32,7 @@
 
   --border: #27272a; /* Muted border color */
   --input: #27272a;
-  --ring: #F8C646; /* Golden yellow for focus rings */
+  --ring: #FFD700; /* Golden yellow for focus rings */
 
   --radius: 0.5rem;
 }
@@ -44,19 +45,19 @@
   --card-foreground: #F9F9F9;
   --popover: #141414;
   --popover-foreground: #F9F9F9;
-  --primary: #E63900;
+  --primary: #FF4D00;
   --primary-foreground: #F9F9F9;
-  --secondary: #F8C646;
+  --secondary: #FFD700;
   --secondary-foreground: #0A0A0A;
-  --muted: #1f1f1f;
-  --muted-foreground: #a1a1aa;
-  --accent: #F8C646;
+  --muted: #2A2A2A;
+  --muted-foreground: #B0B0B0;
+  --accent: #FFD700;
   --accent-foreground: #0A0A0A;
   --destructive: #dc2626;
   --destructive-foreground: #F9F9F9;
   --border: #27272a;
   --input: #27272a;
-  --ring: #F8C646;
+  --ring: #FFD700;
 }
 
 @theme inline {
@@ -92,10 +93,43 @@
   }
   body {
     @apply bg-background text-foreground;
+    background-image: radial-gradient(circle at top, hsl(var(--muted)), hsl(var(--background)));
+    font-family: 'Inter', sans-serif;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-bold text-foreground;
+  }
+
+  h1 {
+    @apply text-4xl;
+  }
+
+  h2 {
+    @apply text-3xl;
+  }
+
+  h3 {
+    @apply text-2xl;
   }
 }
 
 /* Subtle glow effect for selective emphasis */
 .soft-glow {
   text-shadow: 0 0 8px rgba(248, 198, 70, 0.4);
+}
+
+@layer components {
+  .card {
+    background-color: rgba(20, 20, 20, 0.5) !important; /* Semi-transparent background */
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: all 0.2s ease-in-out;
+  }
+
+  .card:hover {
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  }
 }
