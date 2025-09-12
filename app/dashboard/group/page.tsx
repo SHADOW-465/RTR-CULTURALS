@@ -8,6 +8,7 @@ import { EditClubDialog } from "@/components/edit-club-dialog"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Users, Target, Building, Home } from "lucide-react"
+import { Leaderboard } from "@/components/leaderboard"
 
 export default async function GroupDashboard() {
   const user = await getCurrentUser()
@@ -86,6 +87,12 @@ export default async function GroupDashboard() {
           subtitle="Community based"
           icon={Home}
         />
+      </div>
+
+      {/* Leaderboards */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+        <Leaderboard title="College Club Champions" clubs={collegeClubs} />
+        <Leaderboard title="Community Club Champions" clubs={communityClubs} />
       </div>
 
       {/* Add Club Section */}
