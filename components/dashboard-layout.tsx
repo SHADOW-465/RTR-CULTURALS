@@ -51,8 +51,8 @@ export function DashboardLayout({ children, title, userRole }: DashboardLayoutPr
             </div>
             <div className="flex items-center space-x-4">
               <div className="flex items-center space-x-2">
-                <p className="text-sm text-muted-foreground">Powered by</p>
-                <Image src="/seion-logo.png" alt="SEION Logo" width={80} height={20} className="h-5 w-auto" />
+                <p className="text-sm text-muted-foreground">Powered by SEION </p>
+                <Image src="/seion-logo-new.png" alt="SEION Logo" width={80} height={20} className="h-5 w-auto" />
               </div>
               <Button variant="ghost" size="sm" onClick={handleLogout} disabled={isLoggingOut}>
                 <LogOut className="w-4 h-4 mr-2" />
