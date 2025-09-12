@@ -5,252 +5,131 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
-  /* JOSH District Culturals 2025 - Premium Dashboard Theme */
-  --background-start-rgb: 26, 26, 26;
-  --background-end-rgb: 0, 0, 0;
+  /* Sleek, modern, minimalistic, dark-themed */
+  --background: #0A0A0A; /* Deep Charcoal / Black */
+  --foreground: #F9F9F9; /* Off-White for body text */
 
-  --primary-red-1: #C41E3A;
-  --primary-red-2: #8B0000;
-  --primary-red-3: #DC143C;
-
-  --secondary-gold-1: #FFD700;
-  --secondary-gold-2: #FFA500;
-  --secondary-gold-3: #FF8C00;
-
-  --accent-orange-1: #FF4500;
-  --accent-orange-2: #FF6347;
-
-  --text-gold: #FFD700;
-  --text-white: #F5F5F5;
-
-  --background: #1a1a1a;
-  --foreground: #F5F5F5;
-
-  --card: rgba(20, 20, 20, 0.6);
-  --card-foreground: #F5F5F5;
-  --card-border: rgba(255, 215, 0, 0.2);
-  --card-glow: rgba(255, 215, 0, 0.1);
+  --card: #141414; /* Slightly lighter than background */
+  --card-foreground: #F9F9F9;
 
   --popover: #141414;
   --popover-foreground: #F9F9F9;
 
-  --primary: #C41E3A;
-  --primary-foreground: #F5F5F5;
+  --primary: #FF4D00; /* A slightly brighter, more modern orange-red */
+  --primary-foreground: #F9F9F9; /* White text on red buttons */
 
-  --secondary: #FFD700;
-  --secondary-foreground: #1a1a1a;
+  --secondary: #FFD700; /* A richer, more golden yellow */
+  --secondary-foreground: #0A0A0A; /* Black text on yellow background */
 
-  --muted: #2A2A2A;
-  --muted-foreground: #B0B0B0;
+  --muted: #2A2A2A; /* a slightly lighter gray for better contrast */
+  --muted-foreground: #B0B0B0; /* a lighter gray for better readability */
 
-  --accent: #FF4500;
-  --accent-foreground: #F5F5F5;
+  --accent: #FFD700; /* Golden Yellow */
+  --accent-foreground: #0A0A0A;
 
-  --destructive: #DC143C;
-  --destructive-foreground: #F5F5F5;
+  --destructive: #dc2626; /* Standard red for destructive actions */
+  --destructive-foreground: #F9F9F9;
 
-  --border: rgba(255, 215, 0, 0.2);
-  --input: rgba(255, 255, 255, 0.1);
-  --ring: #FFD700;
+  --border: #27272a; /* Muted border color */
+  --input: #27272a;
+  --ring: #FFD700; /* Golden yellow for focus rings */
 
-  --radius: 0.75rem;
+  --radius: 0.5rem;
 }
 
 .dark {
   /* Same theme for dark mode */
-  --background-start-rgb: 26, 26, 26;
-  --background-end-rgb: 0, 0, 0;
-
-  --primary-red-1: #C41E3A;
-  --primary-red-2: #8B0000;
-  --primary-red-3: #DC143C;
-
-  --secondary-gold-1: #FFD700;
-  --secondary-gold-2: #FFA500;
-  --secondary-gold-3: #FF8C00;
-
-  --accent-orange-1: #FF4500;
-  --accent-orange-2: #FF6347;
-
-  --text-gold: #FFD700;
-  --text-white: #F5F5F5;
-
-  --background: #1a1a1a;
-  --foreground: #F5F5F5;
-
-  --card: rgba(20, 20, 20, 0.6);
-  --card-foreground: #F5F5F5;
-  --card-border: rgba(255, 215, 0, 0.2);
-  --card-glow: rgba(255, 215, 0, 0.1);
-
+  --background: #0A0A0A;
+  --foreground: #F9F9F9;
+  --card: #141414;
+  --card-foreground: #F9F9F9;
   --popover: #141414;
   --popover-foreground: #F9F9F9;
-
-  --primary: #C41E3A;
-  --primary-foreground: #F5F5F5;
-
+  --primary: #FF4D00;
+  --primary-foreground: #F9F9F9;
   --secondary: #FFD700;
-  --secondary-foreground: #1a1a1a;
-
+  --secondary-foreground: #0A0A0A;
   --muted: #2A2A2A;
   --muted-foreground: #B0B0B0;
-
-  --accent: #FF4500;
-  --accent-foreground: #F5F5F5;
-
-  --destructive: #DC143C;
-  --destructive-foreground: #F5F5F5;
-
-  --border: rgba(255, 215, 0, 0.2);
-  --input: rgba(255, 255, 255, 0.1);
+  --accent: #FFD700;
+  --accent-foreground: #0A0A0A;
+  --destructive: #dc2626;
+  --destructive-foreground: #F9F9F9;
+  --border: #27272a;
+  --input: #27272a;
   --ring: #FFD700;
+}
 
-  --radius: 0.75rem;
+@theme inline {
+  /* This section seems to be for a theming plugin, keeping it updated */
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --radius-sm: calc(var(--radius) - 2px);
+  --radius-md: var(--radius);
+  --radius-lg: calc(var(--radius) + 2px);
+  --radius-xl: calc(var(--radius) + 4px);
 }
 
 @layer base {
   * {
-    @apply border-border;
+    @apply border-border outline-ring/50;
   }
   body {
     @apply bg-background text-foreground;
-    background: linear-gradient(to bottom, #1a1a1a, #000000);
+    background-image: radial-gradient(circle at top, hsl(var(--muted)), hsl(var(--background)));
     font-family: 'Inter', sans-serif;
-    letter-spacing: 0.5px;
-  }
-
-  body::after {
-    content: "";
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 800"><path fill="rgba(255,255,255,0.02)" d="M0 0h800v800H0z"/></svg>');
-    pointer-events: none;
-    z-index: 100;
   }
 
   h1, h2, h3, h4, h5, h6 {
-    @apply font-bold text-text-gold;
-    letter-spacing: 1px;
+    @apply font-bold text-foreground;
+  }
+
+  h1 {
+    @apply text-4xl;
+  }
+
+  h2 {
+    @apply text-3xl;
+  }
+
+  h3 {
+    @apply text-2xl;
   }
 }
 
-/* Custom scrollbar */
-::-webkit-scrollbar {
-  width: 8px;
-}
-::-webkit-scrollbar-track {
-  background: #1a1a1a;
-}
-::-webkit-scrollbar-thumb {
-  background: linear-gradient(to bottom, var(--primary-red-1), var(--secondary-gold-1));
-  border-radius: 4px;
-}
-::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(to bottom, var(--primary-red-3), var(--secondary-gold-2));
-}
-
-/* Keyframes for animations */
-@keyframes shimmer {
-  0% {
-    background-position: -1000px 0;
-  }
-  100% {
-    background-position: 1000px 0;
-  }
-}
-
-@keyframes glow-pulse {
-  0%, 100% {
-    box-shadow: 0 0 5px var(--secondary-gold-1), 0 0 10px var(--secondary-gold-1);
-  }
-  50% {
-    box-shadow: 0 0 15px var(--secondary-gold-1), 0 0 25px var(--secondary-gold-1);
-  }
-}
-
-@keyframes particle-float {
-  0% {
-    transform: translateY(0) scale(1);
-    opacity: 0;
-  }
-  25%, 75% {
-    opacity: 0.1;
-  }
-  100% {
-    transform: translateY(-100vh) scale(1.5);
-    opacity: 0;
-  }
-}
-
-/* Premium Component Styles */
-.premium-card {
-  background-color: var(--card);
-  backdrop-filter: blur(12px);
-  border: 1px solid;
-  border-image-slice: 1;
-  border-width: 1px;
-  border-image-source: linear-gradient(to right, var(--primary-red-1), var(--secondary-gold-1));
-  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
-  transition: all 0.3s ease-in-out;
-}
-
-.premium-card:hover {
-  transform: translateY(-5px) scale(1.02);
-  box-shadow: 0 0 20px var(--card-glow), 0 0 40px var(--card-glow);
-}
-
-.premium-button {
-  background-image: linear-gradient(to right, var(--primary-red-1) 0%, var(--accent-orange-1) 51%, var(--primary-red-1) 100%);
-  transition: 0.5s;
-  background-size: 200% auto;
-  color: white;
-  box-shadow: 0 0 10px #000;
-}
-
-.premium-button:hover {
-  background-position: right center;
-  color: #fff;
-  text-decoration: none;
-}
-
-.shimmer-effect {
-  position: relative;
-  overflow: hidden;
-}
-
-.shimmer-effect::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -200%;
-  width: 75%;
-  height: 100%;
-  background: linear-gradient(
-    to right,
-    rgba(255, 255, 255, 0) 0%,
-    rgba(255, 255, 255, 0.1) 50%,
-    rgba(255, 255, 255, 0) 100%
-  );
-  transform: skewX(-25deg);
-  animation: shimmer 4s infinite;
-}
-
-.glow-pulse-effect {
-  animation: glow-pulse 2s infinite ease-in-out;
-}
-
-.text-gold {
-  color: var(--text-gold);
-  text-shadow: 0 1px 2px rgba(0,0,0,0.5);
-}
-
-.text-warm-white {
-  color: var(--text-white);
-}
-
+/* Subtle glow effect for selective emphasis */
 .soft-glow {
-  text-shadow: 0 0 8px var(--secondary-gold-2);
+  text-shadow: 0 0 8px rgba(248, 198, 70, 0.4);
+}
+
+@layer components {
+  .card {
+    background-color: rgba(20, 20, 20, 0.5) !important; /* Semi-transparent background */
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: all 0.2s ease-in-out;
+  }
+
+  .card:hover {
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  }
 }
