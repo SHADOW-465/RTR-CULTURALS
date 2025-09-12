@@ -1,86 +1,39 @@
-"use client";
-
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import type { LucideIcon } from "lucide-react";
-import { cn } from "@/lib/utils";
-import { BorderBeam } from "@/components/ui/border-beam";
-import { motion } from "framer-motion";
-import { AnimatedCounter } from "./animated-counter";
-import { useReducedMotion } from "@/lib/hooks/use-reduced-motion";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import type { LucideIcon } from "lucide-react"
+import { cn } from "@/lib/utils"
 
 interface StatsCardProps {
-  title: string;
-  value: number;
-  subtitle?: string;
-  icon?: LucideIcon;
+  title: string
+  value: string | number
+  subtitle?: string
+  icon?: LucideIcon
   trend?: {
-    value: number;
-    isPositive: boolean;
-  };
-  className?: string;
-  glowing?: boolean;
+    value: number
+    isPositive: boolean
+  }
+  className?: string
 }
 
-export function StatsCard({
-  title,
-  value,
-  subtitle,
-  icon: Icon,
-  trend,
-  className,
-  glowing = false,
-}: StatsCardProps) {
-  const shouldReduceMotion = useReducedMotion();
-
+export function StatsCard({ title, value, subtitle, icon: Icon, trend, className }: StatsCardProps) {
   return (
-    <motion.div
-      whileHover={!shouldReduceMotion ? { scale: 1.05, y: -5 } : {}}
-      transition={{ type: "spring", stiffness: 300, damping: 20 }}
-      className="relative"
-    >
-      <Card
-        className={cn(
-          "bg-card/80 backdrop-blur-sm transition-all duration-300 ease-in-out",
-          "hover:bg-card/90 hover:shadow-2xl hover:shadow-primary/20",
-          className
-        )}
-      >
-        {glowing && (
-          <BorderBeam
-            colorFrom="var(--secondary)"
-            colorTo="var(--primary)"
-            duration={4}
-          />
-        )}
-        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-          <CardTitle className="text-sm font-medium text-muted-foreground">
-            {title}
-          </CardTitle>
-          {Icon && <Icon className="h-5 w-5 text-secondary" />}
-        </CardHeader>
-        <CardContent>
-          <div className="text-3xl font-bold text-secondary soft-glow">
-            <AnimatedCounter value={value} />
+    <Card className={cn("hover:shadow-lg transition-all transform hover:-translate-y-1 animate-fade-in", className)}>
+      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+        <CardTitle className="text-sm font-medium">{title}</CardTitle>
+        {Icon && <Icon className="h-4 w-4 text-muted-foreground" />}
+      </CardHeader>
+      <CardContent>
+        <div className="text-2xl font-bold">{value}</div>
+        {subtitle && <p className="text-xs text-muted-foreground mt-1">{subtitle}</p>}
+        {trend && (
+          <div className="flex items-center mt-2">
+            <span className={`text-xs font-medium ${trend.isPositive ? "text-green-600" : "text-red-600"}`}>
+              {trend.isPositive ? "+" : ""}
+              {trend.value}%
+            </span>
+            <span className="text-xs text-muted-foreground ml-1">from last month</span>
           </div>
-          {subtitle && (
-            <p className="text-xs text-muted-foreground mt-1">{subtitle}</p>
-          )}
-          {trend && (
-            <div className="flex items-center mt-2">
-              <span
-                className={`text-xs font-medium ${
-                  trend.isPositive ? "text-green-400" : "text-red-400"
-                }`}
-              >
-                {trend.isPositive ? "▲" : "▼"} {trend.value}%
-              </span>
-              <span className="text-xs text-muted-foreground ml-1">
-                from last month
-              </span>
-            </div>
-          )}
-        </CardContent>
-      </Card>
-    </motion.div>
-  );
+        )}
+      </CardContent>
+    </Card>
+  )
 }
