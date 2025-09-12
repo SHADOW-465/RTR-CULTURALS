@@ -62,7 +62,7 @@ export default async function GroupDashboard() {
   return (
     <DashboardLayout title={`${user.group_name} Dashboard`} userRole={user.role}>
       <div className="mb-8">
-        <h1 className="text-2xl font-bold text-secondary mb-2">{user.group_name}</h1>
+        <h1 className="text-2xl font-bold text-secondary soft-glow mb-2">{user.group_name}</h1>
         <p className="text-muted-foreground">JOSH District Culturals 2025</p>
       </div>
 
@@ -207,23 +207,22 @@ export default async function GroupDashboard() {
       {clubs.length > 0 && (
         <Card className="mt-6">
           <CardHeader>
-            <CardTitle className="text-secondary golden-glow">Registration Progress</CardTitle>
+            <CardTitle className="text-secondary">Registration Progress</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="space-y-3">
-              <div className="flex justify-between items-center font-semibold">
-                <span className="text-base">Overall Progress</span>
-                <span className="text-base text-muted-foreground">
-                  {totalAchieved} / {totalTarget} ({totalTarget > 0 ? Math.round((totalAchieved / totalTarget) * 100) : 0}
-                  %)
+            <div className="space-y-4">
+              <div className="flex justify-between items-center">
+                <span className="text-sm font-medium">Overall Progress</span>
+                <span className="text-sm text-muted-foreground">
+                  {totalAchieved} / {totalTarget} (
+                  {totalTarget > 0 ? Math.round((totalAchieved / totalTarget) * 100) : 0}%)
                 </span>
               </div>
-              <div className="w-full bg-black/30 rounded-full h-4 shadow-inner">
+              <div className="w-full bg-muted rounded-full h-3">
                 <div
-                  className="bg-gradient-to-r from-primary to-secondary h-4 rounded-full transition-all duration-500 ease-out"
+                  className="bg-gradient-to-r from-primary to-secondary h-3 rounded-full transition-all duration-300"
                   style={{
                     width: `${totalTarget > 0 ? Math.min((totalAchieved / totalTarget) * 100, 100) : 0}%`,
-                    boxShadow: `0 0 12px var(--secondary)`,
                   }}
                 />
               </div>

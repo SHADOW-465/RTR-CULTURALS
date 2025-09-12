@@ -35,41 +35,27 @@ export function DashboardLayout({ children, title, userRole }: DashboardLayoutPr
   return (
     <div className="min-h-screen bg-background text-foreground">
       {/* Header */}
-      <header className="relative border-b border-white/10 bg-background/50 backdrop-blur-sm z-10">
-        <div
-          className="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-secondary/50 to-transparent"
-          style={{ boxShadow: "0 0 10px 0 var(--secondary)" }}
-        />
+      <header className="border-b border-border">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-20">
+          <div className="flex justify-between items-center h-16">
             <div className="flex items-center space-x-4">
-              <div className="flex items-center space-x-3">
-                <Image
-                  src="/josh-logo.jpg"
-                  alt="JOSH Logo"
-                  width={48}
-                  height={48}
-                  className="h-12 w-auto rounded-full border-2 border-secondary/50"
-                />
-                <h1 className="text-2xl font-bold text-emboss golden-glow tracking-wider">District Culturals 2025</h1>
+              <div className="flex items-center space-x-2">
+                <Image src="/josh-logo.jpg" alt="JOSH Logo" width={40} height={40} className="h-10 w-auto" />
+                <h1 className="text-xl font-bold text-secondary soft-glow">District Culturals 2025</h1>
               </div>
-              {userRole === "admin" && (
-                <span
-                  className="px-4 py-1.5 text-xs font-semibold uppercase tracking-widest text-secondary
-                             bg-secondary/10 rounded-full border border-secondary/30
-                             backdrop-filter backdrop-blur-sm shadow-lg shadow-secondary/10"
-                >
-                  Admin
+              {userRole && (
+                <span className="px-3 py-1 text-xs font-medium bg-primary/20 text-primary-foreground rounded-full capitalize border border-primary/30">
+                  {userRole.replace(/(\\d+)/, " $1")}
                 </span>
               )}
             </div>
             <div className="flex items-center space-x-4">
-              <div className="flex items-center space-x-2 opacity-80">
-                <p className="text-sm text-muted-foreground">Powered by</p>
+              <div className="flex items-center space-x-2">
+                <p className="text-sm text-muted-foreground">Powered by SEION </p>
                 <Image src="/seion-logo-new.png" alt="SEION Logo" width={80} height={20} className="h-5 w-auto" />
               </div>
-              <Button variant="ghost" size="sm" onClick={handleLogout} disabled={isLoggingOut} className="group">
-                <LogOut className="w-4 h-4 mr-2 transition-transform duration-300 group-hover:scale-75" />
+              <Button variant="ghost" size="sm" onClick={handleLogout} disabled={isLoggingOut}>
+                <LogOut className="w-4 h-4 mr-2" />
                 {isLoggingOut ? "Signing out..." : "Sign Out"}
               </Button>
             </div>
@@ -78,9 +64,9 @@ export function DashboardLayout({ children, title, userRole }: DashboardLayoutPr
       </header>
 
       {/* Main Content */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        <div className="mb-12 text-center">
-          <h2 className="text-4xl font-bold text-emboss golden-glow tracking-wide">{title}</h2>
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div className="mb-8">
+          <h2 className="text-3xl font-bold text-secondary soft-glow">{title}</h2>
         </div>
         {children}
       </main>
