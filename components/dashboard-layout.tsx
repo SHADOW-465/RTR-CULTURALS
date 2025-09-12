@@ -40,8 +40,8 @@ export function DashboardLayout({ children, title, userRole }: DashboardLayoutPr
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center space-x-4">
               <div className="flex items-center space-x-2">
-                <BarChart3 className="w-8 h-8 text-secondary soft-glow" />
-                <h1 className="text-xl font-bold text-secondary soft-glow">JOSH District Culturals 2025</h1>
+                <Image src="/josh-logo.jpg" alt="JOSH Logo" width={40} height={40} className="h-10 w-auto" />
+                <h1 className="text-xl font-bold text-secondary soft-glow">District Culturals 2025</h1>
               </div>
               {userRole && (
                 <span className="px-3 py-1 text-xs font-medium bg-primary/20 text-primary-foreground rounded-full capitalize border border-primary/30">
