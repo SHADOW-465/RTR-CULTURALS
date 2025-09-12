@@ -38,7 +38,8 @@ export function EditClubDialog({ club }: EditClubDialogProps) {
   const [clubType, setClubType] = useState(club.type)
   const [targetRegistrations, setTargetRegistrations] = useState(club.target_registrations.toString())
   const [achievedRegistrations, setAchievedRegistrations] = useState(club.achieved_registrations.toString())
-  const [isLoading, setIsLoading] = useState(false)
+  const [isUpdating, setIsUpdating] = useState(false)
+  const [isDeleting, setIsDeleting] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const router = useRouter()
 
@@ -51,7 +52,7 @@ export function EditClubDialog({ club }: EditClubDialogProps) {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    setIsLoading(true)
+    setIsUpdating(true)
     setError(null)
 
     try {
@@ -78,7 +79,7 @@ export function EditClubDialog({ club }: EditClubDialogProps) {
     } catch (error: unknown) {
       setError(error instanceof Error ? error.message : "An error occurred")
     } finally {
-      setIsLoading(false)
+      setIsUpdating(false)
     }
   }
 
@@ -87,7 +88,7 @@ export function EditClubDialog({ club }: EditClubDialogProps) {
       return
     }
 
-    setIsLoading(true)
+    setIsDeleting(true)
     setError(null)
 
     try {
@@ -107,7 +108,7 @@ export function EditClubDialog({ club }: EditClubDialogProps) {
     } catch (error: unknown) {
       setError(error instanceof Error ? error.message : "An error occurred")
     } finally {
-      setIsLoading(false)
+      setIsDeleting(false)
     }
   }
 
@@ -171,16 +172,16 @@ export function EditClubDialog({ club }: EditClubDialogProps) {
               type="button"
               variant="destructive"
               onClick={handleDelete}
-              disabled={isLoading}
+              disabled={isUpdating || isDeleting}
               className="mr-auto"
             >
-              {isLoading ? "Deleting..." : "Delete"}
+              {isDeleting ? "Deleting..." : "Delete"}
             </Button>
-            <Button type="button" variant="outline" onClick={() => setOpen(false)}>
+            <Button type="button" variant="outline" onClick={() => setOpen(false)} disabled={isUpdating || isDeleting}>
               Cancel
             </Button>
-            <Button type="submit" disabled={isLoading}>
-              {isLoading ? "Updating..." : "Update Club"}
+            <Button type="submit" disabled={isUpdating || isDeleting}>
+              {isUpdating ? "Updating..." : "Update Club"}
             </Button>
           </DialogFooter>
         </form>
