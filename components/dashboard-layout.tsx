@@ -60,7 +60,7 @@ export function DashboardLayout({ children, title, userRole }: DashboardLayoutPr
             </div>
             <div className="flex items-center space-x-6">
               <div className="flex items-center space-x-2">
-                <p className="text-sm text-muted-foreground">Powered by</p>
+                <p className="text-sm text-muted-foreground">Powered by SEION </p>
                 <Image src="/seion-logo-new.png" alt="SEION Logo" width={80} height={20} className="h-5 w-auto" />
               </div>
               <Button
