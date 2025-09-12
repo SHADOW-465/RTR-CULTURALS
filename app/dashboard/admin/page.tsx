@@ -132,29 +132,39 @@ export default async function AdminDashboard() {
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
-              {groupTotals.map((group) => (
-                <div
-                  key={group.group_number}
-                  className="flex items-center justify-between p-3 bg-muted/50 rounded-lg border border-border/50"
-                >
-                  <div className="flex items-center space-x-3">
-                    <Badge variant="outline" className="border-secondary text-muted-foreground">
-                      Group {group.group_number}
-                    </Badge>
-                    <span className="text-sm text-muted-foreground">{group.club_count} clubs</span>
-                  </div>
-                  <div className="text-right">
-                    <div className="font-semibold text-foreground">
-                      {group.achieved_total}/{group.target_total}
+              {groupTotals.map((group) => {
+                const percentage =
+                  group.target_total > 0 ? Math.round((group.achieved_total / group.target_total) * 100) : 0
+                return (
+                  <div
+                    key={group.group_number}
+                    className="p-3 bg-muted/50 rounded-lg border border-border/50 space-y-2"
+                  >
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center space-x-3">
+                        <Badge variant="outline" className="border-secondary text-muted-foreground">
+                          Group {group.group_number}
+                        </Badge>
+                        <span className="text-sm text-muted-foreground">{group.club_count} clubs</span>
+                      </div>
+                      <div className="text-right">
+                        <div className="font-semibold text-foreground">
+                          {group.achieved_total}/{group.target_total}
+                        </div>
+                        <div className="text-xs text-muted-foreground">
+                          {group.target_total > 0 ? `${percentage}% complete` : "N/A"}
+                        </div>
+                      </div>
                     </div>
-                    <div className="text-xs text-muted-foreground">
-                      {group.target_total > 0
-                        ? `${Math.round((group.achieved_total / group.target_total) * 100)}% complete`
-                        : "N/A"}
+                    <div className="w-full bg-muted rounded-full h-3 mt-2">
+                      <div
+                        className="bg-gradient-to-r from-primary to-secondary h-3 rounded-full transition-all duration-500 animate-slide-in-from-left"
+                        style={{ width: `${Math.min(percentage, 100)}%` }}
+                      />
                     </div>
                   </div>
-                </div>
-              ))}
+                )
+              })}
             </div>
           </CardContent>
         </Card>
@@ -227,37 +237,6 @@ export default async function AdminDashboard() {
           </CardContent>
         </Card>
       </div>
-
-      {/* Progress Visualization */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-secondary">Registration Progress by Group</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="space-y-4">
-            {groupTotals.map((group) => {
-              const percentage =
-                group.target_total > 0 ? Math.round((group.achieved_total / group.target_total) * 100) : 0
-              return (
-                <div key={group.group_number} className="space-y-2">
-                  <div className="flex justify-between items-center">
-                    <span className="text-sm font-medium text-foreground">Group {group.group_number}</span>
-                    <span className="text-sm text-muted-foreground">
-                      {group.achieved_total}/{group.target_total} ({percentage}%)
-                    </span>
-                  </div>
-                  <div className="w-full bg-muted rounded-full h-3">
-                    <div
-                      className="bg-gradient-to-r from-primary to-secondary h-3 rounded-full transition-all duration-500 animate-slide-in-from-left"
-                      style={{ width: `${Math.min(percentage, 100)}%` }}
-                    />
-                  </div>
-                </div>
-              )
-            })}
-          </div>
-        </CardContent>
-      </Card>
 
       {/* Club Management Section */}
       <Card className="mt-6">
