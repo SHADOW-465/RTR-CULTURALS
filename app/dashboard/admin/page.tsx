@@ -8,6 +8,7 @@ import { Badge } from "@/components/ui/badge"
 import { Users, Target, Trophy, Calendar, Clock, Building, Home } from "lucide-react"
 import { AddClubDialog } from "@/components/add-club-dialog"
 import { EditClubDialog } from "@/components/edit-club-dialog"
+import { TodoList } from "@/components/todo-list"
 
 interface GroupStats {
   group_number: number
@@ -121,9 +122,9 @@ export default async function AdminDashboard() {
         />
       </div>
 
-      {/* Group Performance */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-        <Card>
+      {/* Group Performance, Top Performers, and To-Do List */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+        <Card className="lg:col-span-1">
           <CardHeader>
             <CardTitle className="flex items-center space-x-2 text-secondary">
               <Users className="w-5 h-5" />
@@ -159,7 +160,7 @@ export default async function AdminDashboard() {
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="lg:col-span-1">
           <CardHeader>
             <CardTitle className="flex items-center space-x-2 text-secondary">
               <Trophy className="w-5 h-5" />
@@ -226,6 +227,10 @@ export default async function AdminDashboard() {
             </div>
           </CardContent>
         </Card>
+
+        <div className="lg:col-span-1">
+          <TodoList />
+        </div>
       </div>
 
       {/* Progress Visualization */}
