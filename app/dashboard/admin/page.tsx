@@ -101,26 +101,33 @@ export default async function AdminDashboard() {
 
       {/* District Overview */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-        <StatsCard title="Total Clubs" value={totalClubs} subtitle="Across district" icon={Users} className="border-secondary" />
+        <StatsCard
+          title="Total Clubs"
+          value={totalClubs}
+          subtitle="Across district"
+          icon={<Users className="w-5 h-5 text-secondary" />}
+          className="border-secondary"
+        />
         <StatsCard
           title="Completion Rate"
-          value={`${completionRate}%`}
+          value={completionRate}
           subtitle={`${districtAchieved}/${districtTarget} registered`}
-          icon={Target}
+          icon={<Target className="w-5 h-5 text-secondary" />}
           className="border-secondary"
+          suffix="%"
         />
         <StatsCard
           title="Days Remaining"
           value={daysLeft > 0 ? daysLeft : 0}
           subtitle="To complete target"
-          icon={Clock}
+          icon={<Clock className="w-5 h-5 text-secondary" />}
           className="border-secondary"
         />
         <StatsCard
           title="Registration Progress"
-          value={`${districtAchieved}`}
+          value={districtAchieved}
           subtitle="Total registrations"
-          icon={Calendar}
+          icon={<Calendar className="w-5 h-5 text-secondary" />}
           className="border-secondary"
         />
       </div>

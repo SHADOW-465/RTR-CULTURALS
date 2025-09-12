@@ -1,34 +1,36 @@
 "use client";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import type { LucideIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { BorderBeam } from "@/components/ui/border-beam";
 import { motion } from "framer-motion";
 import { AnimatedCounter } from "./animated-counter";
 import { useReducedMotion } from "@/lib/hooks/use-reduced-motion";
+import type { ReactNode } from "react";
 
 interface StatsCardProps {
   title: string;
   value: number;
   subtitle?: string;
-  icon?: LucideIcon;
+  icon?: ReactNode;
   trend?: {
     value: number;
     isPositive: boolean;
   };
   className?: string;
   glowing?: boolean;
+  suffix?: string;
 }
 
 export function StatsCard({
   title,
   value,
   subtitle,
-  icon: Icon,
+  icon,
   trend,
   className,
   glowing = false,
+  suffix,
 }: StatsCardProps) {
   const shouldReduceMotion = useReducedMotion();
 
@@ -56,11 +58,12 @@ export function StatsCard({
           <CardTitle className="text-sm font-medium text-muted-foreground">
             {title}
           </CardTitle>
-          {Icon && <Icon className="h-5 w-5 text-secondary" />}
+          {icon}
         </CardHeader>
         <CardContent>
-          <div className="text-3xl font-bold text-secondary soft-glow">
+          <div className="text-3xl font-bold text-secondary soft-glow flex items-baseline">
             <AnimatedCounter value={value} />
+            {suffix && <span className="text-2xl">{suffix}</span>}
           </div>
           {subtitle && (
             <p className="text-xs text-muted-foreground mt-1">{subtitle}</p>
