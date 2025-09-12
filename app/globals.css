@@ -101,7 +101,7 @@
   }
   body {
     @apply bg-background text-foreground;
-    background-image: linear-gradient(to bottom, #B81C38, #8B0000);
+    background-image: radial-gradient(circle, #A52A2A, #1A0000);
     font-family: 'Inter', sans-serif;
   }
 

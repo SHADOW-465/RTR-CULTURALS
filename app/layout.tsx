@@ -21,7 +21,6 @@ export default function RootLayout({
     <html lang="en">
       <body
         className={`font-sans ${GeistSans.variable} ${GeistMono.variable}`}
-        style={{ backgroundColor: "#0a0a0a", color: "#f8c646" }}
       >
         <Suspense fallback={null}>{children}</Suspense>
         <Analytics />
