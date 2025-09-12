@@ -140,6 +140,33 @@
     transform: translateY(-2px);
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
   }
+
+  .snake-border-card {
+    --angle: 0deg;
+    position: relative;
+    border: 2px solid transparent;
+    background-clip: padding-box;
+    overflow: hidden;
+  }
+
+  .snake-border-card::before {
+    content: "";
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: conic-gradient(
+      from var(--angle),
+      transparent 0deg,
+      transparent 90deg,
+      #FFD700 180deg,
+      #DC143C 270deg,
+      transparent 360deg
+    );
+    animation: snake-border-anim 4s linear infinite;
+    z-index: -1;
+  }
 }
 
 @keyframes snake-border-anim {
@@ -149,31 +176,4 @@
   100% {
     --angle: 360deg;
   }
-}
-
-.snake-border-card {
-  --angle: 0deg;
-  position: relative;
-  border: 2px solid transparent;
-  background-clip: padding-box;
-  overflow: hidden;
-}
-
-.snake-border-card::before {
-  content: "";
-  position: absolute;
-  top: -50%;
-  left: -50%;
-  width: 200%;
-  height: 200%;
-  background: conic-gradient(
-    from var(--angle),
-    transparent 0deg,
-    transparent 90deg,
-    #FFD700 180deg,
-    #DC143C 270deg,
-    transparent 360deg
-  );
-  animation: snake-border-anim 4s linear infinite;
-  z-index: -1;
 }
