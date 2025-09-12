@@ -16,26 +16,21 @@ interface StatsCardProps {
 
 export function StatsCard({ title, value, subtitle, icon: Icon, trend, className }: StatsCardProps) {
   return (
-    <Card className={cn("animate-fade-in", className)}>
-      <CardHeader className="flex flex-row items-start justify-between space-y-0 pb-2">
-        <div className="space-y-1">
-          <CardTitle className="text-sm font-medium uppercase tracking-wider">{title}</CardTitle>
-          {subtitle && <p className="text-xs text-muted-foreground/80">{subtitle}</p>}
-        </div>
-        {Icon && (
-          <div className="p-3 bg-secondary/10 rounded-lg shadow-inner shadow-secondary/10">
-            <Icon className="h-6 w-6 text-secondary" />
-          </div>
-        )}
+    <Card className={cn("hover:shadow-lg transition-all transform hover:-translate-y-1 animate-fade-in", className)}>
+      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+        <CardTitle className="text-sm font-medium">{title}</CardTitle>
+        {Icon && <Icon className="h-4 w-4 text-muted-foreground" />}
       </CardHeader>
-      <CardContent className="mt-2">
-        <div className="text-4xl font-bold golden-glow">{value}</div>
+      <CardContent>
+        <div className="text-2xl font-bold">{value}</div>
+        {subtitle && <p className="text-xs text-muted-foreground mt-1">{subtitle}</p>}
         {trend && (
           <div className="flex items-center mt-2">
-            <span className={`text-xs font-medium ${trend.isPositive ? "text-green-400" : "text-red-400"}`}>
-              {trend.isPositive ? "▲" : "▼"} {trend.value}%
+            <span className={`text-xs font-medium ${trend.isPositive ? "text-green-600" : "text-red-600"}`}>
+              {trend.isPositive ? "+" : ""}
+              {trend.value}%
             </span>
-            <span className="text-xs text-muted-foreground ml-2">vs last month</span>
+            <span className="text-xs text-muted-foreground ml-1">from last month</span>
           </div>
         )}
       </CardContent>
