@@ -27,17 +27,17 @@ export function Leaderboard({ title, clubs }: LeaderboardProps) {
       </CardHeader>
       <CardContent>
         {sortedClubs.length === 0 ? (
-          <p className="text-muted-foreground text-center py-4">No data available yet.</p>
+          <p className="text-white/70 text-center py-4">No data available yet.</p>
         ) : (
           <ol className="space-y-2">
             {sortedClubs.map((club, index) => (
               <li
                 key={club.id}
-                className="flex items-center justify-between p-2 rounded-md transition-colors hover:bg-muted"
+                className="flex items-center justify-between p-2 rounded-md transition-colors hover:bg-white/10"
               >
                 <div className="flex items-center">
-                  <span className="text-lg font-bold w-8 text-center text-muted-foreground">{index + 1}</span>
-                  <span className="font-medium text-foreground">{club.name}</span>
+                  <span className="text-lg font-bold w-8 text-center text-white/70">{index + 1}</span>
+                  <span className="font-medium text-white">{club.name}</span>
                 </div>
                 <span className="font-bold text-primary text-lg">{club.achieved_registrations}</span>
               </li>
