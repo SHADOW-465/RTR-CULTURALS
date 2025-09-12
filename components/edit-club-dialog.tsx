@@ -82,6 +82,35 @@ export function EditClubDialog({ club }: EditClubDialogProps) {
     }
   }
 
+  const handleDelete = async () => {
+    if (!window.confirm("Are you sure you want to delete this club? This action cannot be undone.")) {
+      return
+    }
+
+    setIsLoading(true)
+    setError(null)
+
+    try {
+      const response = await fetch(`/api/clubs`, {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id: club.id }),
+      })
+
+      if (!response.ok) {
+        const errorData = await response.json()
+        throw new Error(errorData.error || "Failed to delete club")
+      }
+
+      setOpen(false)
+      router.refresh()
+    } catch (error: unknown) {
+      setError(error instanceof Error ? error.message : "An error occurred")
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
@@ -138,6 +167,15 @@ export function EditClubDialog({ club }: EditClubDialogProps) {
           </div>
           {error && <div className="text-sm text-red-600 mb-4">{error}</div>}
           <DialogFooter>
+            <Button
+              type="button"
+              variant="destructive"
+              onClick={handleDelete}
+              disabled={isLoading}
+              className="mr-auto"
+            >
+              {isLoading ? "Deleting..." : "Delete"}
+            </Button>
             <Button type="button" variant="outline" onClick={() => setOpen(false)}>
               Cancel
             </Button>
