@@ -45,6 +45,39 @@ export async function POST(request: NextRequest) {
   }
 }
 
+export async function DELETE(request: NextRequest) {
+  try {
+    const { id } = await request.json()
+
+    if (!id) {
+      return NextResponse.json({ error: "Club ID is required" }, { status: 400 })
+    }
+
+    const supabase = await createServerClient()
+
+    // First, delete from the 'club_registrations' table
+    const { error: registrationError } = await supabase.from("club_registrations").delete().eq("club_id", id)
+
+    if (registrationError) {
+      console.error("Database error (registrations):", registrationError)
+      return NextResponse.json({ error: "Failed to delete club registration data" }, { status: 500 })
+    }
+
+    // Then, delete from the 'clubs' table
+    const { error: clubError } = await supabase.from("clubs").delete().eq("id", id)
+
+    if (clubError) {
+      console.error("Database error (clubs):", clubError)
+      return NextResponse.json({ error: "Failed to delete club" }, { status: 500 })
+    }
+
+    return NextResponse.json({ message: "Club deleted successfully" }, { status: 200 })
+  } catch (error) {
+    console.error("API error:", error)
+    return NextResponse.json({ error: "Internal server error" }, { status: 500 })
+  }
+}
+
 export async function PUT(request: NextRequest) {
   try {
     const body = await request.json()
