@@ -84,10 +84,6 @@ export function EditClubDialog({ club }: EditClubDialogProps) {
   }
 
   const handleDelete = async () => {
-    if (!window.confirm("Are you sure you want to delete this club? This action cannot be undone.")) {
-      return
-    }
-
     setIsDeleting(true)
     setError(null)
 
