@@ -101,7 +101,7 @@
   }
   body {
     @apply bg-background text-foreground;
-    background-image: radial-gradient(circle at top, hsl(var(--muted)), hsl(var(--background)));
+    background-image: linear-gradient(to bottom, #B81C38, #8B0000);
     font-family: 'Inter', sans-serif;
   }
 
@@ -129,14 +129,14 @@
 
 @layer components {
   .card {
-    background-color: rgba(20, 20, 20, 0.5) !important; /* Semi-transparent background */
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    background-color: rgba(20, 20, 20, 0.6) !important; /* Semi-transparent background */
+    backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
     transition: all 0.2s ease-in-out;
   }
 
   .card:hover {
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.3);
     transform: translateY(-2px);
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
   }
