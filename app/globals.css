@@ -5,59 +5,67 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
-  /* Sleek, modern, minimalistic, dark-themed */
-  --background: #0A0A0A; /* Deep Charcoal / Black */
-  --foreground: #F9F9F9; /* Off-White for body text */
+  /* Blazing Red and Premium Gold Theme */
+  --background: #1a1a1a; /* Charcoal black */
+  --foreground: #F5F5F5; /* Warm white */
 
-  --card: #141414; /* Slightly lighter than background */
-  --card-foreground: #F9F9F9;
+  --card: #2F2F2F; /* Dark slate */
+  --card-foreground: #F5F5F5; /* Warm white */
 
-  --popover: #141414;
-  --popover-foreground: #F9F9F9;
+  --popover: #2F2F2F; /* Dark slate */
+  --popover-foreground: #F5F5F5; /* Warm white */
 
-  --primary: #FF4D00; /* A slightly brighter, more modern orange-red */
-  --primary-foreground: #F9F9F9; /* White text on red buttons */
+  --primary: #DC143C; /* Bright red */
+  --primary-foreground: #F5F5F5; /* Warm white */
 
-  --secondary: #FFD700; /* A richer, more golden yellow */
-  --secondary-foreground: #0A0A0A; /* Black text on yellow background */
+  --secondary: #FFD700; /* Rich gold */
+  --secondary-foreground: #1a1a1a; /* Charcoal black */
 
-  --muted: #2A2A2A; /* a slightly lighter gray for better contrast */
-  --muted-foreground: #B0B0B0; /* a lighter gray for better readability */
+  --muted: #2F2F2F; /* Dark slate */
+  --muted-foreground: #CCCCCC; /* Light gray */
 
-  --accent: #FFD700; /* Golden Yellow */
-  --accent-foreground: #0A0A0A;
+  --accent: #FFD700; /* Rich gold */
+  --accent-foreground: #1a1a1a; /* Charcoal black */
 
-  --destructive: #dc2626; /* Standard red for destructive actions */
-  --destructive-foreground: #F9F9F9;
+  --destructive: #C41E3A; /* Deep crimson */
+  --destructive-foreground: #F5F5F5; /* Warm white */
 
-  --border: #27272a; /* Muted border color */
-  --input: #27272a;
-  --ring: #FFD700; /* Golden yellow for focus rings */
+  --border: #2F2F2F; /* Dark slate */
+  --input: #2F2F2F; /* Dark slate */
+  --ring: #FFD700; /* Rich gold */
 
   --radius: 0.5rem;
 }
 
 .dark {
-  /* Same theme for dark mode */
-  --background: #0A0A0A;
-  --foreground: #F9F9F9;
-  --card: #141414;
-  --card-foreground: #F9F9F9;
-  --popover: #141414;
-  --popover-foreground: #F9F9F9;
-  --primary: #FF4D00;
-  --primary-foreground: #F9F9F9;
-  --secondary: #FFD700;
-  --secondary-foreground: #0A0A0A;
-  --muted: #2A2A2A;
-  --muted-foreground: #B0B0B0;
-  --accent: #FFD700;
-  --accent-foreground: #0A0A0A;
-  --destructive: #dc2626;
-  --destructive-foreground: #F9F9F9;
-  --border: #27272a;
-  --input: #27272a;
-  --ring: #FFD700;
+  /* Blazing Red and Premium Gold Theme */
+  --background: #1a1a1a; /* Charcoal black */
+  --foreground: #F5F5F5; /* Warm white */
+
+  --card: #2F2F2F; /* Dark slate */
+  --card-foreground: #F5F5F5; /* Warm white */
+
+  --popover: #2F2F2F; /* Dark slate */
+  --popover-foreground: #F5F5F5; /* Warm white */
+
+  --primary: #DC143C; /* Bright red */
+  --primary-foreground: #F5F5F5; /* Warm white */
+
+  --secondary: #FFD700; /* Rich gold */
+  --secondary-foreground: #1a1a1a; /* Charcoal black */
+
+  --muted: #2F2F2F; /* Dark slate */
+  --muted-foreground: #CCCCCC; /* Light gray */
+
+  --accent: #FFD700; /* Rich gold */
+  --accent-foreground: #1a1a1a; /* Charcoal black */
+
+  --destructive: #C41E3A; /* Deep crimson */
+  --destructive-foreground: #F5F5F5; /* Warm white */
+
+  --border: #2F2F2F; /* Dark slate */
+  --input: #2F2F2F; /* Dark slate */
+  --ring: #FFD700; /* Rich gold */
 }
 
 @theme inline {
