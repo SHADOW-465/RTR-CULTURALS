@@ -1,6 +1,6 @@
 @import "tailwindcss";
 @import "tw-animate-css";
-@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=Orbitron:wght@500;700;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
 
 @custom-variant dark (&:is(.dark *));
 
@@ -102,11 +102,11 @@
   body {
     @apply bg-background text-foreground;
     background-image: radial-gradient(circle, #A52A2A, #1A0000);
-    font-family: 'Manrope', sans-serif;
+    font-family: 'Inter', sans-serif;
   }
 
-  h1, h2, h3, h4, h5, h6, .card-title, .kpi {
-    @apply font-bold text-foreground font-orbitron;
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-bold text-foreground;
   }
 
   h1 {
