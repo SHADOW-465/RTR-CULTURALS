@@ -9,6 +9,7 @@ import { Users, Target, Trophy, Calendar, Clock, Building, Home } from "lucide-r
 import { AddClubDialog } from "@/components/add-club-dialog"
 import { EditClubDialog } from "@/components/edit-club-dialog"
 import { TodoList } from "@/components/todo-list"
+import { cn } from "@/lib/utils"
 
 interface GroupStats {
   group_number: number
@@ -92,7 +93,7 @@ export default async function AdminDashboard() {
   return (
     <DashboardLayout title="Admin Dashboard" userRole={user.role}>
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-secondary soft-glow mb-2">JOSH District Culturals 2025</h1>
+        <h1 className="text-3xl font-bold text-secondary mb-2">JOSH District Culturals 2025</h1>
         <p className="text-muted-foreground">Registration Portal Dashboard</p>
       </div>
 
@@ -123,12 +124,12 @@ export default async function AdminDashboard() {
       </div>
 
       {/* Group Performance, Top Performers, and To-Do List */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
-        <Card className="lg:col-span-1">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
+        <Card className="lg:col-span-1 group/performance">
           <CardHeader>
-            <CardTitle className="flex items-center space-x-2 text-secondary">
-              <Users className="w-5 h-5" />
-              <span>Group Performance</span>
+            <CardTitle className="flex items-center space-x-3 text-secondary">
+              <Users className="w-6 h-6" />
+              <span className="text-xl">Group Performance</span>
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -139,28 +140,29 @@ export default async function AdminDashboard() {
                 return (
                   <div
                     key={group.group_number}
-                    className="p-3 bg-muted/50 rounded-lg border border-border/50 space-y-2"
+                    className="p-4 bg-black/20 rounded-lg border border-white/10 space-y-3 transition-all duration-300 hover:bg-black/40 hover:border-secondary/50 hover:scale-105"
                   >
                     <div className="flex items-center justify-between">
                       <div className="flex items-center space-x-3">
-                        <Badge variant="outline" className="border-secondary text-muted-foreground">
+                        <Badge variant="outline" className="border-secondary/50 text-secondary font-bold">
                           Group {group.group_number}
                         </Badge>
                         <span className="text-sm text-muted-foreground">{group.club_count} clubs</span>
                       </div>
                       <div className="text-right">
-                        <div className="font-semibold text-foreground">
-                          {group.achieved_total}/{group.target_total}
+                        <div className="font-semibold text-lg text-foreground">
+                          {group.achieved_total} / {group.target_total}
                         </div>
-                        <div className="text-xs text-muted-foreground">
-                          {group.target_total > 0 ? `${percentage}% complete` : "N/A"}
-                        </div>
+                        <div className="text-xs text-muted-foreground">{percentage}% complete</div>
                       </div>
                     </div>
-                    <div className="w-full bg-muted rounded-full h-3 mt-2">
+                    <div className="w-full bg-black/30 rounded-full h-4 shadow-inner">
                       <div
-                        className="bg-gradient-to-r from-primary to-secondary h-3 rounded-full transition-all duration-500 animate-slide-in-from-left"
-                        style={{ width: `${Math.min(percentage, 100)}%` }}
+                        className="bg-gradient-to-r from-primary to-secondary h-4 rounded-full transition-all duration-500 ease-out"
+                        style={{
+                          width: `${Math.min(percentage, 100)}%`,
+                          boxShadow: `0 0 12px var(--secondary)`,
+                        }}
                       />
                     </div>
                   </div>
@@ -172,64 +174,84 @@ export default async function AdminDashboard() {
 
         <Card className="lg:col-span-1">
           <CardHeader>
-            <CardTitle className="flex items-center space-x-2 text-secondary">
-              <Trophy className="w-5 h-5" />
-              <span>Top Performers</span>
+            <CardTitle className="flex items-center space-x-3 text-secondary">
+              <Trophy className="w-6 h-6" />
+              <span className="text-xl">Top Performers</span>
             </CardTitle>
           </CardHeader>
           <CardContent>
             <div className="space-y-6">
               <div>
-                <h4 className="font-medium text-foreground mb-3">Top College-Based Clubs</h4>
-                <div className="space-y-2">
+                <h4 className="font-semibold text-lg text-foreground mb-3">Top College Clubs</h4>
+                <div className="space-y-3">
                   {topCollegeClubs.map((club, index) => (
                     <div
                       key={club.id}
-                      className="flex items-center justify-between p-2 bg-primary/10 rounded border border-primary/20"
+                      className={cn(
+                        "flex items-center justify-between p-3 rounded-lg border transition-all",
+                        {
+                          "bg-secondary/20 border-secondary/50 shadow-lg shadow-secondary/10": index === 0,
+                          "bg-primary/15 border-primary/30": index === 1,
+                          "bg-white/10 border-white/20": index === 2,
+                        }
+                      )}
                     >
-                      <div className="flex items-center space-x-2">
+                      <div className="flex items-center space-x-3">
                         <Badge
                           variant="secondary"
-                          className="w-6 h-6 rounded-full p-0 flex items-center justify-center text-xs"
+                          className={cn("w-7 h-7 rounded-full p-0 flex items-center justify-center text-sm", {
+                            "bg-secondary text-secondary-foreground": index === 0,
+                            "bg-primary text-primary-foreground": index > 0,
+                          })}
                         >
                           {index + 1}
                         </Badge>
                         <div>
-                          <div className="font-medium text-sm">{club.name}</div>
-                          <Badge variant="outline" className="text-xs">
+                          <div className="font-semibold">{club.name}</div>
+                          <Badge variant="outline" className="text-xs mt-1">
                             Group {club.group_number}
                           </Badge>
                         </div>
                       </div>
-                      <div className="font-bold text-foreground">{club.achieved_registrations}</div>
+                      <div className="font-bold text-2xl golden-glow">{club.achieved_registrations}</div>
                     </div>
                   ))}
                 </div>
               </div>
 
               <div>
-                <h4 className="font-medium text-foreground mb-3">Top Community-Based Clubs</h4>
-                <div className="space-y-2">
+                <h4 className="font-semibold text-lg text-foreground mb-3">Top Community Clubs</h4>
+                <div className="space-y-3">
                   {topCommunityClubs.map((club, index) => (
                     <div
                       key={club.id}
-                      className="flex items-center justify-between p-2 bg-accent/10 rounded border border-accent/20"
+                      className={cn(
+                        "flex items-center justify-between p-3 rounded-lg border transition-all",
+                        {
+                          "bg-secondary/20 border-secondary/50 shadow-lg shadow-secondary/10": index === 0,
+                          "bg-primary/15 border-primary/30": index === 1,
+                          "bg-white/10 border-white/20": index === 2,
+                        }
+                      )}
                     >
-                      <div className="flex items-center space-x-2">
+                      <div className="flex items-center space-x-3">
                         <Badge
                           variant="secondary"
-                          className="w-6 h-6 rounded-full p-0 flex items-center justify-center text-xs"
+                          className={cn("w-7 h-7 rounded-full p-0 flex items-center justify-center text-sm", {
+                            "bg-secondary text-secondary-foreground": index === 0,
+                            "bg-primary text-primary-foreground": index > 0,
+                          })}
                         >
                           {index + 1}
                         </Badge>
                         <div>
-                          <div className="font-medium text-sm">{club.name}</div>
-                          <Badge variant="outline" className="text-xs">
+                          <div className="font-semibold">{club.name}</div>
+                          <Badge variant="outline" className="text-xs mt-1">
                             Group {club.group_number}
                           </Badge>
                         </div>
                       </div>
-                      <div className="font-bold text-foreground">{club.achieved_registrations}</div>
+                      <div className="font-bold text-2xl golden-glow">{club.achieved_registrations}</div>
                     </div>
                   ))}
                 </div>
