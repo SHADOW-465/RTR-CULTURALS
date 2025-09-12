@@ -8,6 +8,8 @@ import { SnakeBorderCard } from "@/components/ui/snake-border-card"
 import { Badge } from "@/components/ui/badge"
 import { Users, Target, Trophy, Calendar, Clock, Building, Home } from "lucide-react"
 import { AddClubDialog } from "@/components/add-club-dialog"
+import { TopPerformersCard } from "@/components/top-performers-card"
+import { GroupPerformanceCard } from "@/components/group-performance-card"
 import { EditClubDialog } from "@/components/edit-club-dialog"
 import { TodoList } from "@/components/todo-list"
 
@@ -125,120 +127,8 @@ export default async function AdminDashboard() {
 
       {/* Group Performance, Top Performers, and To-Do List */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
-        <SnakeBorderCard className="lg:col-span-1">
-          <CardHeader>
-            <CardTitle className="flex items-center space-x-2 text-secondary">
-              <Users className="w-5 h-5" />
-              <span>Group Performance</span>
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-4">
-              {groupTotals.map((group) => {
-                const percentage =
-                  group.target_total > 0 ? Math.round((group.achieved_total / group.target_total) * 100) : 0
-                return (
-                  <div
-                    key={group.group_number}
-                    className="p-3 bg-muted/50 rounded-lg border border-border/50 space-y-2"
-                  >
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center space-x-3">
-                        <Badge variant="outline" className="border-secondary text-muted-foreground">
-                          Group {group.group_number}
-                        </Badge>
-                        <span className="text-sm text-muted-foreground">{group.club_count} clubs</span>
-                      </div>
-                      <div className="text-right">
-                        <div className="font-semibold text-foreground">
-                          {group.achieved_total}/{group.target_total}
-                        </div>
-                        <div className="text-xs text-muted-foreground">
-                          {group.target_total > 0 ? `${percentage}% complete` : "N/A"}
-                        </div>
-                      </div>
-                    </div>
-                    <div className="w-full bg-muted rounded-full h-3 mt-2">
-                      <div
-                        className="bg-gradient-to-r from-primary to-secondary h-3 rounded-full transition-all duration-500 animate-slide-in-from-left"
-                        style={{ width: `${Math.min(percentage, 100)}%` }}
-                      />
-                    </div>
-                  </div>
-                )
-              })}
-            </div>
-          </CardContent>
-        </SnakeBorderCard>
-
-        <SnakeBorderCard className="lg:col-span-1">
-          <CardHeader>
-            <CardTitle className="flex items-center space-x-2 text-secondary">
-              <Trophy className="w-5 h-5" />
-              <span>Top Performers</span>
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-6">
-              <div>
-                <h4 className="font-medium text-foreground mb-3">Top College-Based Clubs</h4>
-                <div className="space-y-2">
-                  {topCollegeClubs.map((club, index) => (
-                    <div
-                      key={club.id}
-                      className="flex items-center justify-between p-2 bg-primary/10 rounded border border-primary/20"
-                    >
-                      <div className="flex items-center space-x-2">
-                        <Badge
-                          variant="secondary"
-                          className="w-6 h-6 rounded-full p-0 flex items-center justify-center text-xs"
-                        >
-                          {index + 1}
-                        </Badge>
-                        <div>
-                          <div className="font-medium text-sm">{club.name}</div>
-                          <Badge variant="outline" className="text-xs">
-                            Group {club.group_number}
-                          </Badge>
-                        </div>
-                      </div>
-                      <div className="font-bold text-foreground">{club.achieved_registrations}</div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              <div>
-                <h4 className="font-medium text-foreground mb-3">Top Community-Based Clubs</h4>
-                <div className="space-y-2">
-                  {topCommunityClubs.map((club, index) => (
-                    <div
-                      key={club.id}
-                      className="flex items-center justify-between p-2 bg-accent/10 rounded border border-accent/20"
-                    >
-                      <div className="flex items-center space-x-2">
-                        <Badge
-                          variant="secondary"
-                          className="w-6 h-6 rounded-full p-0 flex items-center justify-center text-xs"
-                        >
-                          {index + 1}
-                        </Badge>
-                        <div>
-                          <div className="font-medium text-sm">{club.name}</div>
-                          <Badge variant="outline" className="text-xs">
-                            Group {club.group_number}
-                          </Badge>
-                        </div>
-                      </div>
-                      <div className="font-bold text-foreground">{club.achieved_registrations}</div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </CardContent>
-        </SnakeBorderCard>
-
+        <GroupPerformanceCard groups={groupTotals} />
+        <TopPerformersCard collegeClubs={topCollegeClubs} communityClubs={topCommunityClubs} />
         <div className="lg:col-span-1">
           <TodoList />
         </div>

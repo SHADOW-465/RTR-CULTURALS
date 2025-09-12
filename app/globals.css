@@ -177,3 +177,18 @@
     --angle: 360deg;
   }
 }
+
+@keyframes border-beam {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-border-beam {
+  animation: border-beam var(--border-beam-duration) infinite linear;
+  animation-delay: var(--border-beam-delay);
+  will-change: transform;
+}
