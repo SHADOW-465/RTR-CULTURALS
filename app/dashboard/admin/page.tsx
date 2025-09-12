@@ -4,6 +4,7 @@ import { getCurrentUser } from "@/lib/get-current-user"
 import { DashboardLayout } from "@/components/dashboard-layout"
 import { StatsCard } from "@/components/stats-card"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { SnakeBorderCard } from "@/components/ui/snake-border-card"
 import { Badge } from "@/components/ui/badge"
 import { Users, Target, Trophy, Calendar, Clock, Building, Home } from "lucide-react"
 import { AddClubDialog } from "@/components/add-club-dialog"
@@ -124,7 +125,7 @@ export default async function AdminDashboard() {
 
       {/* Group Performance, Top Performers, and To-Do List */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
-        <Card className="lg:col-span-1">
+        <SnakeBorderCard className="lg:col-span-1">
           <CardHeader>
             <CardTitle className="flex items-center space-x-2 text-secondary">
               <Users className="w-5 h-5" />
@@ -168,9 +169,9 @@ export default async function AdminDashboard() {
               })}
             </div>
           </CardContent>
-        </Card>
+        </SnakeBorderCard>
 
-        <Card className="lg:col-span-1">
+        <SnakeBorderCard className="lg:col-span-1">
           <CardHeader>
             <CardTitle className="flex items-center space-x-2 text-secondary">
               <Trophy className="w-5 h-5" />
@@ -236,7 +237,7 @@ export default async function AdminDashboard() {
               </div>
             </div>
           </CardContent>
-        </Card>
+        </SnakeBorderCard>
 
         <div className="lg:col-span-1">
           <TodoList />
@@ -244,7 +245,7 @@ export default async function AdminDashboard() {
       </div>
 
       {/* Club Management Section */}
-      <Card className="mt-6">
+      <SnakeBorderCard className="mt-6">
         <CardHeader>
           <div className="flex items-center justify-between">
             <CardTitle className="text-secondary">Club Management</CardTitle>
@@ -304,7 +305,7 @@ export default async function AdminDashboard() {
             </div>
           </div>
         </CardContent>
-      </Card>
+      </SnakeBorderCard>
     </DashboardLayout>
   )
 }

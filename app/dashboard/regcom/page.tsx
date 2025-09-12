@@ -5,6 +5,7 @@ import { DashboardLayout } from "@/components/dashboard-layout"
 import { StatsCard } from "@/components/stats-card"
 import { AddExternalClubDialog } from "@/components/add-external-club-dialog"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { SnakeBorderCard } from "@/components/ui/snake-border-card"
 import { Badge } from "@/components/ui/badge"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Users, Target, Trophy, ExternalLink } from "lucide-react"
@@ -121,7 +122,7 @@ export default async function RegcomDashboard() {
         <TabsContent value="overview" className="space-y-6">
           {/* Group Performance */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <Card>
+            <SnakeBorderCard>
               <CardHeader>
                 <CardTitle className="flex items-center space-x-2">
                   <Users className="w-5 h-5" />
@@ -155,9 +156,9 @@ export default async function RegcomDashboard() {
                   ))}
                 </div>
               </CardContent>
-            </Card>
+            </SnakeBorderCard>
 
-            <Card>
+            <SnakeBorderCard>
               <CardHeader>
                 <CardTitle className="flex items-center space-x-2">
                   <Trophy className="w-5 h-5" />
@@ -199,11 +200,11 @@ export default async function RegcomDashboard() {
                   )}
                 </div>
               </CardContent>
-            </Card>
+            </SnakeBorderCard>
           </div>
 
           {/* Progress Visualization */}
-          <Card>
+          <SnakeBorderCard>
             <CardHeader>
               <CardTitle>Registration Progress by Group</CardTitle>
             </CardHeader>
@@ -231,7 +232,7 @@ export default async function RegcomDashboard() {
                 })}
               </div>
             </CardContent>
-          </Card>
+          </SnakeBorderCard>
         </TabsContent>
 
         <TabsContent value="external" className="space-y-6">
@@ -240,7 +241,7 @@ export default async function RegcomDashboard() {
             <AddExternalClubDialog />
           </div>
 
-          <Card>
+          <SnakeBorderCard>
             <CardHeader>
               <CardTitle className="flex items-center justify-between">
                 <span>External Clubs</span>
@@ -284,11 +285,11 @@ export default async function RegcomDashboard() {
                 </div>
               )}
             </CardContent>
-          </Card>
+          </SnakeBorderCard>
         </TabsContent>
 
         <TabsContent value="reports" className="space-y-6">
-          <Card>
+          <SnakeBorderCard>
             <CardHeader>
               <CardTitle>Detailed Reports</CardTitle>
             </CardHeader>
@@ -330,7 +331,7 @@ export default async function RegcomDashboard() {
                 </div>
               </div>
             </CardContent>
-          </Card>
+          </SnakeBorderCard>
         </TabsContent>
       </Tabs>
     </DashboardLayout>

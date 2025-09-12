@@ -6,6 +6,7 @@ import { StatsCard } from "@/components/stats-card"
 import { AddClubDialog } from "@/components/add-club-dialog"
 import { EditClubDialog } from "@/components/edit-club-dialog"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { SnakeBorderCard } from "@/components/ui/snake-border-card"
 import { Badge } from "@/components/ui/badge"
 import { Users, Target, Building, Home } from "lucide-react"
 import { Leaderboard } from "@/components/leaderboard"
@@ -101,7 +102,7 @@ export default async function GroupDashboard() {
       </div>
 
       {/* Clubs List */}
-      <Card>
+      <SnakeBorderCard>
         <CardHeader>
           <CardTitle className="flex items-center justify-between text-secondary">
             <span>Club Registrations</span>
@@ -201,11 +202,11 @@ export default async function GroupDashboard() {
             </div>
           )}
         </CardContent>
-      </Card>
+      </SnakeBorderCard>
 
       {/* Progress Summary */}
       {clubs.length > 0 && (
-        <Card className="mt-6">
+        <SnakeBorderCard className="mt-6">
           <CardHeader>
             <CardTitle className="text-secondary">Registration Progress</CardTitle>
           </CardHeader>
@@ -228,7 +229,7 @@ export default async function GroupDashboard() {
               </div>
             </div>
           </CardContent>
-        </Card>
+        </SnakeBorderCard>
       )}
     </DashboardLayout>
   )
