@@ -62,28 +62,46 @@ export function TodoList() {
   }
 
   const handleToggleTodo = async (id: string, is_completed: boolean) => {
-    const res = await fetch(`/api/todos/${id}`, {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ is_completed: !is_completed }),
-    })
-
-    if (res.ok) {
-      setTodos(
-        todos.map((todo) =>
-          todo.id === id ? { ...todo, is_completed: !is_completed } : todo
-        )
+    const originalTodos = [...todos]
+    setTodos(
+      todos.map((todo) =>
+        todo.id === id ? { ...todo, is_completed: !is_completed } : todo
       )
+    )
+
+    try {
+      const res = await fetch(`/api/todos/${id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ is_completed: !is_completed }),
+      })
+
+      if (!res.ok) {
+        throw new Error("Failed to toggle task")
+      }
+    } catch (error) {
+      console.error("Failed to toggle task:", error)
+      setTodos(originalTodos)
+      // Optionally, show an error message to the user
     }
   }
 
   const handleDeleteTodo = async (id: string) => {
-    const res = await fetch(`/api/todos/${id}`, {
-      method: "DELETE",
-    })
+    const originalTodos = [...todos]
+    setTodos(todos.filter((todo) => todo.id !== id))
 
-    if (res.ok) {
-      setTodos(todos.filter((todo) => todo.id !== id))
+    try {
+      const res = await fetch(`/api/todos/${id}`, {
+        method: "DELETE",
+      })
+
+      if (!res.ok) {
+        throw new Error("Failed to delete task")
+      }
+    } catch (error) {
+      console.error("Failed to delete task:", error)
+      setTodos(originalTodos)
+      // Optionally, show an error message to the user
     }
   }
 
