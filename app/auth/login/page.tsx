@@ -2,12 +2,14 @@
 
 import type React from "react"
 import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { useRouter } from "next/navigation"
 import { useState } from "react"
 import { Eye, EyeOff } from "lucide-react"
+import { SnakeBorderCard } from "@/components/ui/snake-border-card"
+import Image from "next/image"
 
 export default function LoginPage() {
   const [username, setUsername] = useState("")
@@ -57,9 +59,9 @@ export default function LoginPage() {
   return (
     <div className="min-h-screen bg-background flex items-center justify-center p-6">
       <div className="w-full max-w-md">
-        <Card>
+        <SnakeBorderCard>
           <CardHeader className="text-center pb-6">
-            <CardTitle className="text-2xl font-bold text-secondary">RID 3233 Culturals JOSH</CardTitle>
+            <CardTitle className="text-2xl font-bold text-secondary soft-glow">RID 3233 Culturals JOSH</CardTitle>
             <CardDescription>Registration Portal Login</CardDescription>
           </CardHeader>
           <CardContent>
@@ -117,8 +119,19 @@ export default function LoginPage() {
             <div className="mt-6 text-center text-sm text-muted-foreground">
               Use your assigned username and password to access the portal
             </div>
+            <div className="mt-6 text-center">
+              <a
+                href="https://www.seion.digital/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center space-x-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
+              >
+                <span>Powered by</span>
+                <Image src="/seion-logo-new.png" alt="SEION Logo" width={80} height={20} className="h-5 w-auto" />
+              </a>
+            </div>
           </CardContent>
-        </Card>
+        </SnakeBorderCard>
       </div>
     </div>
   )
