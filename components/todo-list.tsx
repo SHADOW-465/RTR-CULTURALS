@@ -27,16 +27,37 @@ export function TodoList() {
     e.preventDefault()
     if (!newTask.trim()) return
 
-    const res = await fetch("/api/todos", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ task: newTask }),
-    })
+    const tempId = crypto.randomUUID()
+    const optimisticTodo: Todo = {
+      id: tempId,
+      task: newTask,
+      is_completed: false,
+    }
 
-    if (res.ok) {
+    setTodos([optimisticTodo, ...todos])
+    setNewTask("")
+
+    try {
+      const res = await fetch("/api/todos", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ task: newTask }),
+      })
+
+      if (!res.ok) {
+        throw new Error("Failed to add task")
+      }
+
       const { data: newTodo } = await res.json()
-      setTodos([newTodo, ...todos])
-      setNewTask("")
+      setTodos((currentTodos) =>
+        currentTodos.map((todo) => (todo.id === tempId ? newTodo : todo))
+      )
+    } catch (error) {
+      console.error("Failed to add task:", error)
+      setTodos((currentTodos) =>
+        currentTodos.filter((todo) => todo.id !== tempId)
+      )
+      // Optionally, show an error message to the user
     }
   }
 
