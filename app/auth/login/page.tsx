@@ -127,7 +127,7 @@ export default function LoginPage() {
                 className="inline-flex items-center space-x-2 text-sm text-secondary-foreground transition-colors"
                 style={{ textShadow: "0 0 8px #F5F5F5" }}
               >
-                <span>Powered by</span>
+                <span>Powered by SEION</span>
                 <Image src="/seion-logo-new.png" alt="SEION Logo" width={80} height={20} className="h-5 w-auto" />
               </a>
             </div>
