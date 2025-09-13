@@ -83,7 +83,7 @@ export function DashboardLayout({ children, title, userRole }: DashboardLayoutPr
             rel="noopener noreferrer"
             className="inline-flex items-center space-x-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
           >
-            <span>Powered by</span>
+            <span>Powered by SEION</span>
             <Image src="/seion-logo-new.png" alt="SEION Logo" width={80} height={20} className="h-5 w-auto" />
           </a>
         </div>
