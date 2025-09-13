@@ -27,38 +27,23 @@ export default async function GroupDashboard() {
 
   const groupNumber = getGroupNumber(user.role)
 
-  const { data: clubsData, error } = await supabase
-    .from("clubs")
-    .select(
-      `
-      id,
-      name,
-      type,
-      group_number,
-      club_registrations (
-        target_registrations,
-        achieved_registrations
-      )
-    `
-    )
-    .eq("group_number", groupNumber)
-    .order("created_at", { ascending: false })
+  const { data: stats, error } = await supabase.rpc('get_dashboard_stats', { p_group_number: groupNumber })
 
   if (error) {
-    console.error("Error fetching group clubs data:", error)
+    console.error("Error fetching group stats:", error)
     return <div>Error loading data.</div>
   }
 
-  const clubs = clubsData.map((club) => ({
-    ...club,
-    target_registrations: club.club_registrations[0]?.target_registrations || 0,
-    achieved_registrations: club.club_registrations[0]?.achieved_registrations || 0,
-  }))
+  const {
+    group_totals: groupTotals,
+    college_clubs_list: collegeClubs,
+    community_clubs_list: communityClubs,
+    all_clubs: clubs
+  } = stats
 
-  const totalTarget = clubs.reduce((sum, club) => sum + club.target_registrations, 0)
-  const totalAchieved = clubs.reduce((sum, club) => sum + club.achieved_registrations, 0)
-  const collegeClubs = clubs.filter((club) => club.type === "college")
-  const communityClubs = clubs.filter((club) => club.type === "community")
+  const groupStats = groupTotals[0]
+  const totalTarget = groupStats.target_total
+  const totalAchieved = groupStats.achieved_total
 
   return (
     <DashboardLayout title={`${user.group_name} Dashboard`} userRole={user.role}>

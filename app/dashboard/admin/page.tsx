@@ -28,75 +28,34 @@ export default async function AdminDashboard() {
 
   const supabase = await createServerClient()
 
-  const { data: allClubsData, error } = await supabase
-    .from("clubs")
-    .select(
-      `
-      id,
-      name,
-      type,
-      group_number,
-      is_external,
-      created_at,
-      club_registrations (
-        target_registrations,
-        achieved_registrations
-      )
-    `
-    )
-    .order("name", { ascending: true })
+  const { data: stats, error } = await supabase.rpc('get_dashboard_stats')
 
   if (error) {
-    console.error("Error fetching clubs data:", error)
-    // Handle the error appropriately
+    console.error("Error fetching dashboard stats:", error)
     return <div>Error loading data.</div>
   }
 
-  const allClubs = allClubsData.map((club) => ({
-    ...club,
-    target_registrations: club.club_registrations[0]?.target_registrations || 0,
-    achieved_registrations: club.club_registrations[0]?.achieved_registrations || 0,
-  }))
+  const {
+    group_totals: groupTotals,
+    district_totals: districtTotals,
+    top_college_clubs: topCollegeClubs,
+    top_community_clubs: topCommunityClubs,
+    college_clubs_list: collegeClubsList,
+    community_clubs_list: communityClubsList,
+    all_clubs: allClubs
+  } = stats
 
-  // Calculate group totals
-  const groupTotals: GroupStats[] = []
-  for (let i = 1; i <= 5; i++) {
-    const groupClubs = allClubs.filter((club) => club.group_number === i)
-    groupTotals.push({
-      group_number: i,
-      target_total: groupClubs.reduce((sum, club) => sum + club.target_registrations, 0),
-      achieved_total: groupClubs.reduce((sum, club) => sum + club.achieved_registrations, 0),
-      club_count: groupClubs.length,
-    })
-  }
-
-  // Calculate district totals
   const districtTarget = 3500
-  const districtAchieved = groupTotals.reduce((sum, group) => sum + group.achieved_total, 0)
-  const totalClubs = allClubs.length
+  const districtAchieved = districtTotals.district_achieved
+  const totalClubs = districtTotals.total_clubs
+  const totalExternalClubs = districtTotals.total_external_clubs
 
   const completionRate = districtTarget > 0 ? Math.round((districtAchieved / districtTarget) * 100) : 0
   const endDate = new Date("2025-09-28") // Assuming end date
   const today = new Date()
   const daysLeft = Math.ceil((endDate.getTime() - today.getTime()) / (1000 * 60 * 60 * 24))
 
-  const totalExternalClubs = allClubs.filter((club) => club.is_external).length
-  const topCollegeClub = [...allClubs]
-    .filter((c) => c.type === "college")
-    .sort((a, b) => b.achieved_registrations - a.achieved_registrations)[0]
-
-  const topCollegeClubs = allClubs
-    .filter((club) => club.type === "college")
-    .sort((a, b) => b.achieved_registrations - a.achieved_registrations)
-    .slice(0, 3)
-
-  const topCommunityClubs = allClubs
-    .filter((club) => club.type === "community")
-    .sort((a, b) => b.achieved_registrations - a.achieved_registrations)
-    .slice(0, 3)
-
-  const collegeClubsList = allClubs.filter((club) => club.type === "college" && !club.is_external)
-  const communityClubsList = allClubs.filter((club) => club.type === "community" && !club.is_external)
+  const topCollegeClub = topCollegeClubs?.[0]
 
   return (
     <DashboardLayout title="Admin Dashboard" userRole={user.role}>
