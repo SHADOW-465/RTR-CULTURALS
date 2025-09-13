@@ -10,7 +10,6 @@ import { Users, Target, Trophy, Calendar, Clock, Building, Home, ExternalLink } 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { AddClubDialog } from "@/components/add-club-dialog"
 import { EditClubDialog } from "@/components/edit-club-dialog"
-import { AddExternalClubDialog } from "@/components/add-external-club-dialog"
 import { TodoList } from "@/components/todo-list"
 
 interface GroupStats {
@@ -341,11 +340,6 @@ export default async function AdminDashboard() {
         </TabsContent>
 
         <TabsContent value="external-clubs" className="space-y-6">
-          <div className="flex justify-between items-center">
-            <h3 className="text-lg font-semibold text-secondary">External Club Management</h3>
-            <AddExternalClubDialog />
-          </div>
-
           <SnakeBorderCard>
             <CardHeader>
               <CardTitle className="flex items-center justify-between text-secondary">
