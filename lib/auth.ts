@@ -69,8 +69,7 @@ export async function deleteSession(sessionToken: string): Promise<void> {
 export function hasPermission(userRole: string, action: string, groupNumber?: number): boolean {
   switch (userRole) {
     case "admin":
-      // Admin has view-only access to all data
-      return action === "view"
+      return true
 
     case "regcom":
       // RegCom can view all and add/edit external clubs
