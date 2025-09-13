@@ -41,9 +41,9 @@ export default async function GroupDashboard() {
     all_clubs: clubs
   } = stats
 
-  const groupStats = groupTotals[0]
-  const totalTarget = groupStats.target_total
-  const totalAchieved = groupStats.achieved_total
+  const groupStats = groupTotals?.[0]
+  const totalTarget = groupStats?.target_total ?? 0
+  const totalAchieved = groupStats?.achieved_total ?? 0
 
   return (
     <DashboardLayout title={`${user.group_name} Dashboard`} userRole={user.role}>
