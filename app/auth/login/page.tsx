@@ -124,7 +124,7 @@ export default function LoginPage() {
                 href="https://www.seion.digital/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center space-x-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
+                className="inline-flex items-center space-x-2 text-sm text-foreground hover:text-secondary transition-colors bg-black/30 px-3 py-2 rounded-lg"
               >
                 <span>Powered by</span>
                 <Image src="/seion-logo-new.png" alt="SEION Logo" width={80} height={20} className="h-5 w-auto" />
