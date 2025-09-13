@@ -10,7 +10,6 @@ import { Users, Target, Trophy, Calendar, Clock, Building, Home, ExternalLink } 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { AddClubDialog } from "@/components/add-club-dialog"
 import { EditClubDialog } from "@/components/edit-club-dialog"
-import { AddExternalClubDialog } from "@/components/add-external-club-dialog"
 import { TodoList } from "@/components/todo-list"
 
 interface GroupStats {
@@ -96,7 +95,6 @@ export default async function AdminDashboard() {
     .sort((a, b) => b.achieved_registrations - a.achieved_registrations)
     .slice(0, 3)
 
-  const externalClubs = allClubs.filter((club) => club.is_external)
   const collegeClubsList = allClubs.filter((club) => club.type === "college" && !club.is_external)
   const communityClubsList = allClubs.filter((club) => club.type === "community" && !club.is_external)
 
@@ -148,10 +146,9 @@ export default async function AdminDashboard() {
       </div>
 
       <Tabs defaultValue="overview" className="space-y-6">
-        <TabsList className="grid w-full grid-cols-5">
+        <TabsList className="grid w-full grid-cols-4">
           <TabsTrigger value="overview">Overview</TabsTrigger>
           <TabsTrigger value="club-management">Club Management</TabsTrigger>
-          <TabsTrigger value="external-clubs">External Clubs</TabsTrigger>
           <TabsTrigger value="reports">Reports</TabsTrigger>
           <TabsTrigger value="todo">To-Do List</TabsTrigger>
         </TabsList>
@@ -336,62 +333,6 @@ export default async function AdminDashboard() {
                   </div>
                 </div>
               </div>
-            </CardContent>
-          </SnakeBorderCard>
-        </TabsContent>
-
-        <TabsContent value="external-clubs" className="space-y-6">
-          <div className="flex justify-between items-center">
-            <h3 className="text-lg font-semibold text-secondary">External Club Management</h3>
-            <AddExternalClubDialog />
-          </div>
-
-          <SnakeBorderCard>
-            <CardHeader>
-              <CardTitle className="flex items-center justify-between text-secondary">
-                <span>External Clubs</span>
-                <Badge variant="outline">{externalClubs.length} clubs</Badge>
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              {externalClubs.length === 0 ? (
-                <div className="text-center py-8 text-muted-foreground">
-                  <ExternalLink className="w-12 h-12 mx-auto mb-4 text-gray-400" />
-                  <p>No external clubs registered yet.</p>
-                  <p className="text-sm">Click "Add External Club" to register clubs from other districts.</p>
-                </div>
-              ) : (
-                <div className="space-y-4">
-                  {externalClubs.map((club) => (
-                    <div
-                      key={club.id}
-                      className="flex items-center justify-between p-4 bg-muted/50 rounded-lg border border-border/50"
-                    >
-                      <div className="flex-1">
-                        <div className="flex items-center space-x-3 mb-2">
-                          <h3 className="font-medium text-foreground">{club.name}</h3>
-                          <Badge variant={club.type === "college" ? "default" : "secondary"}>
-                            {club.type === "college" ? "College" : "Community"}
-                          </Badge>
-                          <Badge variant="outline">Group {club.group_number}</Badge>
-                          <Badge className="bg-green-100 text-green-800">External</Badge>
-                        </div>
-                        <div className="flex items-center space-x-6 text-sm text-muted-foreground">
-                          <span>Target: {club.target_registrations}</span>
-                          <span>Achieved: {club.achieved_registrations}</span>
-                          <span>
-                            Progress:{" "}
-                            {club.target_registrations > 0
-                              ? Math.round((club.achieved_registrations / club.target_registrations) * 100)
-                              : 0}
-                            %
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              )}
             </CardContent>
           </SnakeBorderCard>
         </TabsContent>
