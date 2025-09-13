@@ -29,10 +29,10 @@ BEGIN
   ),
   district_stats AS (
     SELECT
-      SUM(target_total) as district_target,
-      SUM(achieved_total) as district_achieved,
-      SUM(club_count) as total_clubs,
-      SUM(external_club_count) as total_external_clubs
+      COALESCE(SUM(target_total), 0) as district_target,
+      COALESCE(SUM(achieved_total), 0) as district_achieved,
+      COALESCE(SUM(club_count), 0) as total_clubs,
+      COALESCE(SUM(external_club_count), 0) as total_external_clubs
     FROM group_stats
   ),
   top_college_clubs AS (
@@ -68,14 +68,14 @@ BEGIN
     ORDER BY name
   )
   SELECT jsonb_build_object(
-    'group_totals', (SELECT jsonb_agg(gs) FROM group_stats gs),
+    'group_totals', COALESCE((SELECT jsonb_agg(gs) FROM group_stats gs), '[]'::jsonb),
     'district_totals', (SELECT to_jsonb(ds) FROM district_stats ds),
-    'top_college_clubs', (SELECT jsonb_agg(tcc) FROM top_college_clubs tcc),
-    'top_community_clubs', (SELECT jsonb_agg(tcc) FROM top_community_clubs tcc),
-    'college_clubs_list', (SELECT jsonb_agg(ccl) FROM college_clubs_list ccl),
-    'community_clubs_list', (SELECT jsonb_agg(ccl) FROM community_clubs_list ccl),
-    'external_clubs_list', (SELECT jsonb_agg(aec) FROM all_external_clubs aec),
-    'all_clubs', (SELECT jsonb_agg(acwr) FROM all_clubs_with_registrations acwr)
+    'top_college_clubs', COALESCE((SELECT jsonb_agg(tcc) FROM top_college_clubs tcc), '[]'::jsonb),
+    'top_community_clubs', COALESCE((SELECT jsonb_agg(tcc) FROM top_community_clubs tcc), '[]'::jsonb),
+    'college_clubs_list', COALESCE((SELECT jsonb_agg(ccl) FROM college_clubs_list ccl), '[]'::jsonb),
+    'community_clubs_list', COALESCE((SELECT jsonb_agg(ccl) FROM community_clubs_list ccl), '[]'::jsonb),
+    'external_clubs_list', COALESCE((SELECT jsonb_agg(aec) FROM all_external_clubs aec), '[]'::jsonb),
+    'all_clubs', COALESCE((SELECT jsonb_agg(acwr) FROM all_clubs_with_registrations acwr), '[]'::jsonb)
   ) INTO result;
 
   RETURN result;
