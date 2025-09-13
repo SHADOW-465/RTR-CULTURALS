@@ -10,12 +10,13 @@ interface Club {
 interface LeaderboardProps {
   title: string
   clubs: Club[]
+  limit?: number
 }
 
-export function Leaderboard({ title, clubs }: LeaderboardProps) {
+export function Leaderboard({ title, clubs, limit = 3 }: LeaderboardProps) {
   const sortedClubs = [...clubs]
     .sort((a, b) => b.achieved_registrations - a.achieved_registrations)
-    .slice(0, 5) // Show top 5
+    .slice(0, limit)
 
   return (
     <Card>
