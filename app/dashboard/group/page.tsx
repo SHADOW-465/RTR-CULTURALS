@@ -92,8 +92,8 @@ export default async function GroupDashboard() {
 
       {/* Leaderboards */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-        <Leaderboard title="College Club Champions" clubs={collegeClubs} />
-        <Leaderboard title="Community Club Champions" clubs={communityClubs} />
+        <Leaderboard title="College Club Champions" clubs={collegeClubs} type="college" />
+        <Leaderboard title="Community Club Champions" clubs={communityClubs} type="community" />
       </div>
 
       {/* Add Club Section */}
