@@ -73,7 +73,7 @@ export default async function AdminDashboard() {
   const totalClubs = allClubs.length
 
   const completionRate = districtTarget > 0 ? Math.round((districtAchieved / districtTarget) * 100) : 0
-  const endDate = new Date("2025-12-31") // Assuming end date
+  const endDate = new Date("2025-09-28") // Assuming end date
   const today = new Date()
   const daysLeft = Math.ceil((endDate.getTime() - today.getTime()) / (1000 * 60 * 60 * 24))
 
