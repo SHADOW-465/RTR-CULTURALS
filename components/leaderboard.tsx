@@ -17,7 +17,7 @@ interface LeaderboardProps {
 export function Leaderboard({ title, clubs, type }: LeaderboardProps) {
   const sortedClubs = [...clubs]
     .sort((a, b) => b.achieved_registrations - a.achieved_registrations)
-    .slice(0, 5) // Show top 5
+    .slice(0, 3) // Show top 3
 
   const cardColorClass = type === "college" ? "bg-primary/10 border-primary/20" : "bg-accent/10 border-accent/20"
 
