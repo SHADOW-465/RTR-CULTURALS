@@ -27,65 +27,28 @@ export default async function RegcomDashboard() {
 
   const supabase = await createServerClient()
 
-  const { data: allClubsData, error } = await supabase
-    .from("clubs")
-    .select(
-      `
-      id,
-      name,
-      type,
-      group_number,
-      is_external,
-      created_at,
-      club_registrations (
-        target_registrations,
-        achieved_registrations
-      )
-    `
-    )
-    .order("group_number", { ascending: true })
-    .order("created_at", { ascending: false })
+  const { data: stats, error } = await supabase.rpc('get_dashboard_stats')
 
   if (error) {
-    console.error("Error fetching clubs data for regcom:", error)
+    console.error("Error fetching dashboard stats for regcom:", error)
     return <div>Error loading data.</div>
   }
 
-  const allClubs = allClubsData.map((club) => ({
-    ...club,
-    target_registrations: club.club_registrations[0]?.target_registrations || 0,
-    achieved_registrations: club.club_registrations[0]?.achieved_registrations || 0,
-  }))
+  const {
+    group_totals: groupTotals,
+    district_totals: districtTotals,
+    top_college_clubs: topCollegeClubs,
+    top_community_clubs: topCommunityClubs,
+    external_clubs_list: externalClubs,
+    all_clubs: allClubs
+  } = stats
 
-  // Calculate group statistics
-  const groupTotals: GroupStats[] = []
-  for (let i = 1; i <= 5; i++) {
-    const groupClubs = allClubs.filter((club) => club.group_number === i)
-    const externalClubs = groupClubs.filter((club) => club.is_external)
-    groupTotals.push({
-      group_number: i,
-      target_total: groupClubs.reduce((sum, club) => sum + club.target_registrations, 0),
-      achieved_total: groupClubs.reduce((sum, club) => sum + club.achieved_registrations, 0),
-      club_count: groupClubs.length,
-      external_count: externalClubs.length,
-    })
-  }
+  const districtTarget = districtTotals.district_target
+  const districtAchieved = districtTotals.district_achieved
+  const totalExternalClubs = districtTotals.total_external_clubs
 
-  // Calculate district totals
-  const districtTarget = groupTotals.reduce((sum, group) => sum + group.target_total, 0)
-  const districtAchieved = groupTotals.reduce((sum, group) => sum + group.achieved_total, 0)
-  const totalExternalClubs = groupTotals.reduce((sum, group) => sum + group.external_count, 0)
-
-  // Get top clubs
-  const topCollegeClub = [...allClubs]
-    .filter((c) => c.type === "college")
-    .sort((a, b) => b.achieved_registrations - a.achieved_registrations)[0]
-  const topCommunityClub = [...allClubs]
-    .filter((c) => c.type === "community")
-    .sort((a, b) => b.achieved_registrations - a.achieved_registrations)[0]
-
-  // Get external clubs
-  const externalClubs = allClubs.filter((club) => club.is_external)
+  const topCollegeClub = topCollegeClubs?.[0]
+  const topCommunityClub = topCommunityClubs?.[0]
 
   return (
     <DashboardLayout title="Registration Committee Dashboard" userRole="regcom">
