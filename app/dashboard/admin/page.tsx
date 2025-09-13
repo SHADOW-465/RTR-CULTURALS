@@ -96,8 +96,9 @@ export default async function AdminDashboard() {
     .sort((a, b) => b.achieved_registrations - a.achieved_registrations)
     .slice(0, 3)
 
-  const collegeClubsList = allClubs.filter((club) => club.type === "college")
-  const communityClubsList = allClubs.filter((club) => club.type === "community")
+  const externalClubs = allClubs.filter((club) => club.is_external)
+  const collegeClubsList = allClubs.filter((club) => club.type === "college" && !club.is_external)
+  const communityClubsList = allClubs.filter((club) => club.type === "community" && !club.is_external)
 
   return (
     <DashboardLayout title="Admin Dashboard" userRole={user.role}>
