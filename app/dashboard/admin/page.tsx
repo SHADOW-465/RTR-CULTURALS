@@ -105,7 +105,7 @@ export default async function AdminDashboard() {
       </div>
 
       <Tabs defaultValue="overview" className="space-y-6">
-        <TabsList className="grid w-full grid-cols-4">
+        <TabsList className="grid w-full grid-cols-2 sm:grid-cols-4">
           <TabsTrigger value="overview">Overview</TabsTrigger>
           <TabsTrigger value="club-management">Club Management</TabsTrigger>
           <TabsTrigger value="reports">Reports</TabsTrigger>
