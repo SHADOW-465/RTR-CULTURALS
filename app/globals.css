@@ -5,67 +5,67 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
-  /* Blazing Red and Premium Gold Theme */
-  --background: #1a1a1a; /* Charcoal black */
-  --foreground: #F5F5F5; /* Warm white */
+  /* Neumorphic Soft UI */
+  --background: #E0E5EC;
+  --foreground: #3A4759;
 
-  --card: #2F2F2F; /* Dark slate */
-  --card-foreground: #F5F5F5; /* Warm white */
+  --card: #E0E5EC;
+  --card-foreground: #3A4759;
 
-  --popover: #2F2F2F; /* Dark slate */
-  --popover-foreground: #F5F5F5; /* Warm white */
+  --popover: #E0E5EC;
+  --popover-foreground: #3A4759;
 
-  --primary: #DC143C; /* Bright red */
-  --primary-foreground: #F5F5F5; /* Warm white */
+  --primary: #4A90E2;
+  --primary-foreground: #FFFFFF;
 
-  --secondary: #FFD700; /* Rich gold */
-  --secondary-foreground: #1a1a1a; /* Charcoal black */
+  --secondary: #50E3C2;
+  --secondary-foreground: #3A4759;
 
-  --muted: #2F2F2F; /* Dark slate */
-  --muted-foreground: #CCCCCC; /* Light gray */
+  --muted: #B8C1CC;
+  --muted-foreground: #6D7580;
 
-  --accent: #FFD700; /* Rich gold */
-  --accent-foreground: #1a1a1a; /* Charcoal black */
+  --accent: #F5A623;
+  --accent-foreground: #FFFFFF;
 
-  --destructive: #C41E3A; /* Deep crimson */
-  --destructive-foreground: #F5F5F5; /* Warm white */
+  --destructive: #D0021B;
+  --destructive-foreground: #FFFFFF;
 
-  --border: #2F2F2F; /* Dark slate */
-  --input: #2F2F2F; /* Dark slate */
-  --ring: #FFD700; /* Rich gold */
+  --border: #D1D9E6;
+  --input: #D1D9E6;
+  --ring: #4A90E2;
 
-  --radius: 0.5rem;
+  --radius: 0.8rem;
 }
 
 .dark {
-  /* Blazing Red and Premium Gold Theme */
-  --background: #1a1a1a; /* Charcoal black */
-  --foreground: #F5F5F5; /* Warm white */
+  /* Neumorphic Soft UI */
+  --background: #3A4759;
+  --foreground: #E0E5EC;
 
-  --card: #2F2F2F; /* Dark slate */
-  --card-foreground: #F5F5F5; /* Warm white */
+  --card: #3A4759;
+  --card-foreground: #E0E5EC;
 
-  --popover: #2F2F2F; /* Dark slate */
-  --popover-foreground: #F5F5F5; /* Warm white */
+  --popover: #3A4759;
+  --popover-foreground: #E0E5EC;
 
-  --primary: #DC143C; /* Bright red */
-  --primary-foreground: #F5F5F5; /* Warm white */
+  --primary: #4A90E2;
+  --primary-foreground: #FFFFFF;
 
-  --secondary: #FFD700; /* Rich gold */
-  --secondary-foreground: #1a1a1a; /* Charcoal black */
+  --secondary: #50E3C2;
+  --secondary-foreground: #3A4759;
 
-  --muted: #2F2F2F; /* Dark slate */
-  --muted-foreground: #CCCCCC; /* Light gray */
+  --muted: #6D7580;
+  --muted-foreground: #B8C1CC;
 
-  --accent: #FFD700; /* Rich gold */
-  --accent-foreground: #1a1a1a; /* Charcoal black */
+  --accent: #F5A623;
+  --accent-foreground: #FFFFFF;
 
-  --destructive: #C41E3A; /* Deep crimson */
-  --destructive-foreground: #F5F5F5; /* Warm white */
+  --destructive: #D0021B;
+  --destructive-foreground: #FFFFFF;
 
-  --border: #2F2F2F; /* Dark slate */
-  --input: #2F2F2F; /* Dark slate */
-  --ring: #FFD700; /* Rich gold */
+  --border: #2C3541;
+  --input: #2C3541;
+  --ring: #4A90E2;
 }
 
 @theme inline {
@@ -101,7 +101,6 @@
   }
   body {
     @apply bg-background text-foreground;
-    background-image: radial-gradient(circle, #A52A2A, #1A0000);
     font-family: 'Inter', sans-serif;
   }
 
@@ -122,45 +121,3 @@
   }
 }
 
-/* Subtle glow effect for selective emphasis */
-.soft-glow {
-  text-shadow: 0 0 8px rgba(248, 198, 70, 0.4);
-}
-
-@layer components {
-  .snake-border-card {
-    --angle: 0deg;
-    position: relative;
-    border: 2px solid transparent;
-    background-clip: padding-box;
-    overflow: hidden;
-  }
-
-  .snake-border-card::before {
-    content: "";
-    position: absolute;
-    top: -50%;
-    left: -50%;
-    width: 200%;
-    height: 200%;
-    background: conic-gradient(
-      from var(--angle),
-      transparent 0deg,
-      transparent 90deg,
-      #FFD700 180deg,
-      #DC143C 270deg,
-      transparent 360deg
-    );
-    animation: snake-border-anim 4s linear infinite;
-    z-index: -1;
-  }
-}
-
-@keyframes snake-border-anim {
-  0% {
-    --angle: 0deg;
-  }
-  100% {
-    --angle: 360deg;
-  }
-}
