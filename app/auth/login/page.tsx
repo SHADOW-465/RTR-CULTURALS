@@ -57,7 +57,8 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen bg-background flex items-center justify-center p-6">
+    // The bg-background class is removed here to allow the global gradient from globals.css to be visible.
+    <div className="min-h-screen flex items-center justify-center p-6">
       <div className="w-full max-w-md">
         <SnakeBorderCard>
           <CardHeader className="text-center pb-6">
