@@ -60,7 +60,7 @@ export default function LoginPage() {
     // The bg-background class is removed here to allow the global gradient from globals.css to be visible.
     <div className="min-h-screen flex items-center justify-center p-6">
       <div className="w-full max-w-md">
-        <SnakeBorderCard>
+        <SnakeBorderCard className="bg-transparent backdrop-blur-none shadow-none border-none">
           <CardHeader className="text-center pb-6">
             <CardTitle className="text-2xl font-bold text-secondary soft-glow">RID 3233 Culturals JOSH</CardTitle>
             <CardDescription>Registration Portal Login</CardDescription>
